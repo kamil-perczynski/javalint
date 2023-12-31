@@ -8,7 +8,7 @@ class MainKtTest {
 
   @Test
   fun testCheckFormatting() {
-    val exitCode = executeCli("--cwd", "/Users/kperczynski/IdeaProjects/augias")
+    val exitCode = executeCli(".mvn/**", "src/**", "!target", "--cwd", "/Users/kperczynski/IdeaProjects/augias")
     assertEquals(1, exitCode)
   }
 

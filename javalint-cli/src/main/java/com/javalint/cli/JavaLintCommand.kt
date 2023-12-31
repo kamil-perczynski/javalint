@@ -3,14 +3,31 @@ package com.javalint.cli
 
 import com.javalint.cli.commands.CheckFormattingCommand
 import com.javalint.cli.commands.FixFormattingCommand
-import org.apache.logging.log4j.Logger
+import com.javalint.cli.gitignore.*
+import com.javalint.codestyle.InlineJavaLintCodeStyle
 import picocli.CommandLine.*
+import java.io.PrintStream
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.Callable
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.stream.Collectors.toList
 
-private lateinit var logger: Logger
+val patternTypesPriority: List<JavaLintPathPattern.Type> = listOf(
+  JavaLintPathPattern.Type.IGNORES,
+  JavaLintPathPattern.Type.INCLUDES
+)
+
+/**
+ * By default, hidden files and directories are ignored (being compliant to ktlint).
+ *
+ * Additionally, as reasonable defaults, typical folders with dependencies
+ * or build outputs are excluded as well.
+ */
+val defaultPathsFilter = ExcludeHiddenDirectoriesFilter(
+  listOf("target", "build", "dist", "node_modules")
+)
 
 @Command(
   headerHeading =
@@ -19,10 +36,11 @@ An anti-bikeshedding Java linter with built-in formatter.
 
 Usage:
   javalint <flags> [patterns]
-  java -jar ktlint.jar <flags> [patterns]
+  java -jar javalint.jar <flags> [patterns]
 
 Examples:
-  # Check the style of all Java, XML, JSON and Yaml files (ending with '.kt' or '.kts') inside the current dir (recursively).
+  # Check the style of all Java, XML, JSON and Yaml files
+  # (ending with '.java', '.xml', '.json', '.yml' or '.yaml') inside the current dir (recursively).
   #
   # Hidden folders will be skipped.
   javalint
@@ -135,13 +153,29 @@ class JavaLintCommand : Callable<Int> {
   override fun call(): Int {
     val projectRoot = Paths.get(cwd).toAbsolutePath().normalize()
 
+    val pathsFilter: PathsFilter = toPathsFilter(projectRoot, patterns)
+    val codeStyle = InlineJavaLintCodeStyle()
+    val paths = discoverProjectFiles(projectRoot, pathsFilter)
+
     if (format) {
-      FixFormattingCommand(projectRoot).run()
-      return 0
+      return FixFormattingCommand(projectRoot, paths, codeStyle).call()
     }
 
-    return CheckFormattingCommand(projectRoot).call()
+    return CheckFormattingCommand(projectRoot, paths, codeStyle).call()
   }
 
+}
 
+private fun toPathsFilter(projectRoot: Path, cliPatterns: List<String>): PathsFilter {
+  if (cliPatterns.isEmpty()) {
+    return defaultPathsFilter
+  }
+
+  val javaLintPatterns = JavaLintPathPatterns(
+    cliPatterns.stream()
+      .map(::parseCliJavaLintPathPattern)
+      .sorted(Comparator.comparing { patternTypesPriority.indexOf(it.type) })
+      .collect(toList())
+  )
+  return JavaLintPatternPathFilter(projectRoot, javaLintPatterns)
 }
