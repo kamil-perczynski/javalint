@@ -1,4 +1,4 @@
-package com.javalint.gitignore
+package com.javalint.cli.gitignore
 
 import java.io.IOException
 import java.nio.file.FileVisitResult
@@ -12,14 +12,16 @@ fun discoverProjectFiles(projectRoot: Path, pathsFilter: PathsFilter): List<Path
   val paths = mutableListOf<Path>()
 
   val fileVisitor = object : FileVisitor<Path> {
+
     override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes?): FileVisitResult {
-      return pathsFilter.matchDir(dir)
+      return if (pathsFilter.matchDir(dir))
+        FileVisitResult.CONTINUE
+      else
+        FileVisitResult.SKIP_SUBTREE
     }
 
     override fun visitFile(file: Path, attrs: BasicFileAttributes?): FileVisitResult {
-      val matchFile = pathsFilter.matchFile(file)
-
-      if (matchFile == FileVisitResult.CONTINUE) {
+      if (pathsFilter.matchFile(file)) {
         val relativeFile = file.relativeTo(projectRoot)
         paths.add(relativeFile)
       }
@@ -38,12 +40,4 @@ fun discoverProjectFiles(projectRoot: Path, pathsFilter: PathsFilter): List<Path
   Files.walkFileTree(projectRoot, fileVisitor)
 
   return paths
-}
-
-fun discoverVersionedFiles(projectRoot: Path): List<Path> {
-  val paths = discoverProjectFiles(projectRoot, ExcludedHiddenDirectoriesFilter(listOf("target")))
-
-  val patterns = parseGitignoreFile(projectRoot)
-
-  return paths.filter(patterns::isIncluded).toList()
 }
