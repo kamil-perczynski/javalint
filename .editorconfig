@@ -11,7 +11,7 @@ end_of_line = lf
 insert_final_newline = true
 max_line_length = 100
 
-[*.kt]
+[*.{kt,java}]
 ij_any_method_call_chain_wrap = on_every_item
 ij_any_wrap_first_method_in_call_chain = true
 ij_any_call_parameters_wrap = on_every_item
@@ -23,4 +23,3 @@ ij_any_parentheses_expression_new_line_after_left_paren = true
 
 ij_any_method_parameters_wrap = on_every_item
 ij_any_prefer_parameters_wrap = true
-

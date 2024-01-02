@@ -20,7 +20,6 @@ class JavaLintPatternPathFilter(
 
     val normalizedPath = dir.relativeTo(projectRoot).normalize()
 
-
     // If the directory is not explicitly ignored, then we must include it
     val matchedPattern = patterns.matches(normalizedPath)
       ?: return true

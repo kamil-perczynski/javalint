@@ -6,7 +6,6 @@ import com.javalint.cli.commands.FixFormattingCommand
 import com.javalint.cli.gitignore.*
 import com.javalint.codestyle.InlineJavaLintCodeStyle
 import picocli.CommandLine.*
-import java.io.PrintStream
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.Callable
@@ -157,11 +156,10 @@ class JavaLintCommand : Callable<Int> {
     val codeStyle = InlineJavaLintCodeStyle()
     val paths = discoverProjectFiles(projectRoot, pathsFilter)
 
-    if (format) {
-      return FixFormattingCommand(projectRoot, paths, codeStyle).call()
-    }
-
-    return CheckFormattingCommand(projectRoot, paths, codeStyle).call()
+    return if (format)
+      FixFormattingCommand(projectRoot, paths, codeStyle).call()
+    else
+      CheckFormattingCommand(projectRoot, paths, codeStyle).call()
   }
 
 }
