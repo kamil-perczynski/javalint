@@ -7,8 +7,8 @@ private const val POM_PROPERTIES_PATH = "/META-INF/maven/com.javalint/javalint-c
 private const val LOCAL_POM_PROPERTIES_PATH = "pom.properties"
 
 class JavaLintVersionProvider : CommandLine.IVersionProvider {
-  override fun getVersion(): Array<String> {
 
+  override fun getVersion(): Array<String> {
     val inStream = javaClass.classLoader.getResourceAsStream(POM_PROPERTIES_PATH)
       ?: javaClass.classLoader.getResourceAsStream(LOCAL_POM_PROPERTIES_PATH)
 
