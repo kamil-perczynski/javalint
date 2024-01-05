@@ -2,7 +2,7 @@ package com.javalint.cli.pathpatterns
 
 import com.javalint.cli.gitignore.JavaLintPathPattern
 import com.javalint.cli.gitignore.parseCliJavaLintPathPattern
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 

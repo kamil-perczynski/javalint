@@ -26,7 +26,10 @@ import com.intellij.openapi.vfs.local.WriteableCoreLocalVirtualFile
 import com.intellij.pom.PomModel
 import com.intellij.pom.core.impl.LangPomModel
 import com.intellij.pom.tree.TreeAspect
-import com.intellij.psi.*
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiManager
 import com.intellij.psi.codeStyle.*
 import com.intellij.psi.impl.LocalImpl
 import com.intellij.psi.impl.PsiDocumentManagerBase
@@ -94,57 +97,60 @@ class IntellijFormatter(private val options: IntellijFormatterOptions) {
   }
 
 
-  fun formatFiles(
-    filePaths: List<Path>,
+  fun formatFile(
+    filePath: Path,
     javaLintCodeStyle: JavaLintCodeStyle,
     onFileFormatted: (path: Path, formattedElement: PsiElement) -> Unit
   ) {
-    val configuredCodeStyle = toConfiguredCodeStyle(javaLintCodeStyle)
+    val configuredCodeStyle = toConfiguredCodeStyle(filePath, javaLintCodeStyle)
 
     EventQueue.invokeAndWait {
       WriteCommandAction.runWriteCommandAction(project) {
         projectCodeStyleSettingsManager.runWithLocalSettings(
           configuredCodeStyle,
-          Runnable { formatPaths(filePaths, onFileFormatted) }
+          Runnable { formatPath(filePath, onFileFormatted) }
         )
       }
     }
   }
 
-  private fun toConfiguredCodeStyle(javaLintCodeStyle: JavaLintCodeStyle): CodeStyleSettings {
+  private fun toConfiguredCodeStyle(
+    filePath: Path,
+    javaLintCodeStyle: JavaLintCodeStyle
+  ): CodeStyleSettings {
     val codeStyleSettings = projectCodeStyleSettingsManager.createSettings()
 
     for (formatterLanguage in formatterLanguages) {
       formatterLanguage.configureCodeStyleSettings(codeStyleSettings)
     }
 
-    return javaLintCodeStyle.configure(codeStyleSettings)
+    return javaLintCodeStyle.configure(filePath, codeStyleSettings)
   }
 
-  private fun formatPaths(
-    relativeFiles: List<Path>,
+  private fun formatPath(
+    relativeFile: Path,
     onFileFormatted: (path: Path, formattedElement: PsiElement) -> Unit
   ) {
-    options.formatterEvents.formattingStarted()
+    val psiFile = toPsiFile(relativeFile)
 
-    for (relativeFile in relativeFiles) {
-      val psiFile = toPsiFile(relativeFile) ?: continue
-      options.formatterEvents.fileFormattingStarted(relativeFile)
-
-      val originalContent = psiFile.textToCharArray()
-
-      val reformattedElement = codeStyleManager.reformat(psiFile)
-
-      val isModified = !psiFile.textToCharArray().contentEquals(originalContent)
-
-      options.formatterEvents.fileFormattingEnd(relativeFile, isModified)
-
-      if (isModified) {
-        onFileFormatted.invoke(relativeFile, reformattedElement)
-      }
+    if (psiFile == null) {
+      options.formatterEvents.fileIgnored(relativeFile)
+      return
     }
 
-    options.formatterEvents.formattingEnd()
+    options.formatterEvents.fileFormattingStarted(relativeFile)
+
+    val originalContent = psiFile.textToCharArray()
+
+    val reformattedElement = codeStyleManager.reformat(psiFile)
+
+    val isModified = !psiFile.textToCharArray().contentEquals(originalContent)
+
+    options.formatterEvents.fileFormattingEnd(relativeFile, isModified)
+
+    if (isModified) {
+      onFileFormatted.invoke(relativeFile, reformattedElement)
+    }
   }
 
   private fun toPsiFile(relativeFile: Path): PsiFile? {

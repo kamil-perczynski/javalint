@@ -18,6 +18,7 @@ class FixFormattingCommand(
   private val paths: List<Path>,
   private val codeStyle: JavaLintCodeStyle
 ) : Callable<Int> {
+
   override fun call(): Int {
     val formatterEvents = FixFormattingCommandEvents(projectRoot)
 
@@ -27,18 +28,25 @@ class FixFormattingCommand(
 
     val threadPool = Executors.newFixedThreadPool(2)
 
-    formatter.formatFiles(paths, codeStyle) { file, formattedEl ->
-      threadPool.submit {
-        val byteBuffer = StandardCharsets.UTF_8.encode(
-          CharBuffer.wrap(formattedEl.textToCharArray())
-        )
+    formatterEvents.formattingStarted()
 
-        Files.write(projectRoot.resolve(file), byteBuffer.toByteArray())
+    for (path in paths) {
+      formatter.formatFile(path, codeStyle) { file, formattedEl ->
+        threadPool.submit {
+          val byteBuffer = StandardCharsets.UTF_8.encode(
+            CharBuffer.wrap(formattedEl.textToCharArray())
+          )
+
+          Files.write(projectRoot.resolve(file), byteBuffer.toByteArray())
+        }
       }
     }
+
+    formatterEvents.formattingEnd()
 
     threadPool.shutdown()
     threadPool.awaitTermination(5, TimeUnit.MINUTES)
     return 0
   }
+
 }

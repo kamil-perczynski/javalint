@@ -1,20 +1,29 @@
-package com.javalint.ec4j.linter.settings
+package com.javalint.ec.settings
 
 import com.intellij.psi.codeStyle.CodeStyleDefaults
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings.IndentOptions
 import com.javalint.codestyle.JavaLintCodeStyle
-import com.javalint.ec4j.linter.logging.Slf4j
+import com.javalint.logging.Slf4j
+import java.nio.file.Path
 
-class EditorConfigJavaLintCodeStyle(private val properties: List<EditorConfigProperty>) :
-  JavaLintCodeStyle {
+class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
 
   companion object : Slf4j()
 
-  override fun configure(settings: CodeStyleSettings): CodeStyleSettings {
-    val codeStyleSettingsAdapter = EditorConfigCodeStyleSettingsAdapter(settings)
+  override fun configure(file: Path, settings: CodeStyleSettings): CodeStyleSettings {
+    val properties = propertiesSource.findECProps(file)
 
-    for (property in properties) {
+    return codeStyleSettings(settings, properties)
+  }
+
+  private fun codeStyleSettings(
+    settings: CodeStyleSettings,
+    editorConfigProperties: List<ECProperty>
+  ): CodeStyleSettings {
+    val codeStyleSettingsAdapter = ECCodeStyleSettingsAdapter(settings)
+
+    for (property in editorConfigProperties) {
       when (property.name) {
         "charset" -> logUnsupportedProperty(property)
         "indent_style" -> logUnsupportedProperty(property)
@@ -42,7 +51,7 @@ class EditorConfigJavaLintCodeStyle(private val properties: List<EditorConfigPro
     return settings
   }
 
-  private fun logUnsupportedProperty(property: EditorConfigProperty) {
+  private fun logUnsupportedProperty(property: ECProperty) {
     log.debug("Unsupported property: {}", property.name)
   }
 

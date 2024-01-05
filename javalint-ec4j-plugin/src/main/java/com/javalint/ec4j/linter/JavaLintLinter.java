@@ -1,19 +1,16 @@
 package com.javalint.ec4j.linter;
 
-import com.javalint.ec4j.linter.settings.EditorConfigJavaLintCodeStyle;
-import com.javalint.ec4j.linter.settings.EditorConfigProperty;
+import com.javalint.ec.settings.ECCodeStyle;
+import com.javalint.ec.settings.ParsedECProperties;
 import com.javalint.formatter.IntellijFormatter;
 import com.javalint.formatter.IntellijFormatterOptions;
 import org.ec4j.core.ResourceProperties;
-import org.ec4j.core.model.Property;
 import org.ec4j.lint.api.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class JavaLintLinter implements Linter {
 
@@ -49,10 +46,9 @@ public class JavaLintLinter implements Linter {
                       ViolationHandler violationHandler) {
     ensureResourceIsRead(resource);
 
-    final EditorConfigJavaLintCodeStyle javaLintCodeStyle =
-      toEditorconfigJavaLintCodeStyle(resourceProperties);
+    final ECCodeStyle javaLintCodeStyle = toECCodeStyle(resourceProperties);
 
-    formatter.formatFiles(List.of(resource.getPath()), javaLintCodeStyle, (path, psiElement) -> {
+    formatter.formatFile(resource.getPath(), javaLintCodeStyle, (path, psiElement) -> {
       final Violation violation = new Violation(
         resource,
         new Location(1, resource.length()),
@@ -67,19 +63,10 @@ public class JavaLintLinter implements Linter {
   }
 
   @NotNull
-  private static EditorConfigJavaLintCodeStyle toEditorconfigJavaLintCodeStyle(ResourceProperties resourceProperties) {
-    final Map<String, Property> properties = resourceProperties.getProperties();
-
-    final List<EditorConfigProperty> editorconfigProperties = properties.values().stream()
-      .map(JavaLintLinter::toEditorConfigProperty)
-      .collect(Collectors.toList());
-
-    return new EditorConfigJavaLintCodeStyle(editorconfigProperties);
-  }
-
-  @NotNull
-  private static EditorConfigProperty toEditorConfigProperty(Property property) {
-    return new EditorConfigProperty(property.getName(), property.getSourceValue());
+  private ECCodeStyle toECCodeStyle(ResourceProperties resourceProperties) {
+    return new ECCodeStyle(
+      new ParsedECProperties(resourceProperties)
+    );
   }
 
   private static void ensureResourceIsRead(Resource resource) {

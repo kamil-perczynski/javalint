@@ -13,6 +13,7 @@
     <module>javalint-formatter</module>
     <module>javalint-cli</module>
     <module>javalint-ec4j-plugin</module>
+    <module>javalint-ec4j</module>
   </modules>
 
   <properties>

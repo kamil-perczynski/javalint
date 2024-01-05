@@ -13,6 +13,7 @@ class CheckFormattingCommand(
   private val paths: List<Path>,
   private val codeStyle: JavaLintCodeStyle
 ) : Callable<Int> {
+
   override fun call(): Int {
     val formatterEvents = CheckFormattingCommandEvents(projectRoot)
 
@@ -20,8 +21,15 @@ class CheckFormattingCommand(
       IntellijFormatterOptions(projectRoot, formatterEvents)
     )
 
-    formatter.formatFiles(paths, codeStyle) { _, _ -> }
+    formatterEvents.formattingStarted()
+
+    for (path in paths) {
+      formatter.formatFile(path, codeStyle) { _, _ -> }
+    }
+
+    formatterEvents.formattingEnd()
 
     return min(formatterEvents.reformattedFilesCount, 1)
   }
+
 }
