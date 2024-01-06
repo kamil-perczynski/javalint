@@ -1,11 +1,15 @@
 package com.javalint.cli
 
 
+import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.javalint.cli.commands.CheckFormattingCommand
 import com.javalint.cli.commands.FixFormattingCommand
 import com.javalint.cli.gitignore.*
-import com.javalint.codestyle.InlineJavaLintCodeStyle
+import com.javalint.codestyle.JavaLintCodeStyle
+import com.javalint.ec.settings.ECCodeStyle
+import com.javalint.ec.settings.ECFile
 import picocli.CommandLine.*
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.Callable
@@ -153,13 +157,17 @@ class JavaLintCommand : Callable<Int> {
     val projectRoot = Paths.get(cwd).toAbsolutePath().normalize()
 
     val pathsFilter: PathsFilter = toPathsFilter(projectRoot, patterns)
-    val codeStyle = InlineJavaLintCodeStyle()
     val paths = discoverProjectFiles(projectRoot, pathsFilter)
 
-    return if (format)
-      FixFormattingCommand(projectRoot, paths, codeStyle).call()
+    val javaLintCodeStyle = if (Files.exists(projectRoot.resolve(".editorconfig")))
+      ECCodeStyle(ECFile(projectRoot))
     else
-      CheckFormattingCommand(projectRoot, paths, codeStyle).call()
+      DefaultIjCodeStyle.INSTANCE
+
+    return if (format)
+      FixFormattingCommand(projectRoot, paths, javaLintCodeStyle).call()
+    else
+      CheckFormattingCommand(projectRoot, paths, javaLintCodeStyle).call()
   }
 
 }
@@ -176,4 +184,10 @@ private fun toPathsFilter(projectRoot: Path, cliPatterns: List<String>): PathsFi
       .collect(toList())
   )
   return JavaLintPatternPathFilter(projectRoot, javaLintPatterns)
+}
+
+enum class DefaultIjCodeStyle : JavaLintCodeStyle {
+  INSTANCE;
+
+  override fun configure(file: Path, settings: CodeStyleSettings): CodeStyleSettings = settings
 }

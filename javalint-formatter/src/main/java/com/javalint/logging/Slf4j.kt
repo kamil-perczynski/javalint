@@ -1,4 +1,4 @@
-package com.javalint.ec4j.linter.logging
+package com.javalint.logging
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

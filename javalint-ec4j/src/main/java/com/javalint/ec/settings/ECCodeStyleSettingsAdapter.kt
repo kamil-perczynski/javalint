@@ -1,4 +1,4 @@
-package com.javalint.ec4j.linter.settings
+package com.javalint.ec.settings
 
 import com.intellij.configurationStore.Property
 import com.intellij.json.JsonLanguage
@@ -12,7 +12,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings.*
 import com.intellij.psi.codeStyle.CustomCodeStyleSettings
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings
 import com.intellij.psi.formatter.xml.XmlCodeStyleSettings
-import com.javalint.ec4j.linter.logging.Slf4j
+import com.javalint.logging.Slf4j
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.formatter.YAMLCodeStyleSettings
 import java.lang.reflect.Field
@@ -26,17 +26,17 @@ private val YAML_FIELDS = detectCodeStyleFields(YAMLCodeStyleSettings::class.jav
 private val XML_FIELDS = detectCodeStyleFields(XmlCodeStyleSettings::class.java)
 private val JSON_FIELDS = detectCodeStyleFields(JsonCodeStyleSettings::class.java)
 
-class EditorConfigCodeStyleSettingsAdapter(private val codeStyleSettings: CodeStyleSettings) {
+class ECCodeStyleSettingsAdapter(private val codeStyleSettings: CodeStyleSettings) {
 
   companion object : Slf4j()
 
-  fun setIjProperty(ec4jProperty: EditorConfigProperty) {
-    if (!isIjProperty(ec4jProperty)) {
-      log.debug("Unknown property: {}", ec4jProperty.name)
+  fun setIjProperty(ecProperty: ECProperty) {
+    if (!isIjProperty(ecProperty)) {
+      log.debug("Unknown property: {}", ecProperty.name)
       return
     }
 
-    val parts = ec4jProperty.name.split("_").toTypedArray()
+    val parts = ecProperty.name.split("_").toTypedArray()
 
     val ijProperty = Arrays.stream(parts)
       .skip(2)
@@ -47,23 +47,23 @@ class EditorConfigCodeStyleSettingsAdapter(private val codeStyleSettings: CodeSt
     if (COMMON_FIELDS.containsKey(ijProperty)) {
       val field = COMMON_FIELDS[ijProperty]!!
 
-      val castedValue = toCastedValue(ec4jProperty, field)
-      logPropertyValueAssigned(ec4jProperty, castedValue)
+      val castedValue = toCastedValue(ecProperty, field)
+      logPropertyValueAssigned(ecProperty, castedValue)
 
       field[commonSettings] = castedValue
       return
     }
 
-    trySetProperty(ijProperty, ec4jProperty, JAVA_FIELDS, JavaCodeStyleSettings::class.java)
-      ?: trySetProperty(ijProperty, ec4jProperty, XML_FIELDS, XmlCodeStyleSettings::class.java)
-      ?: trySetProperty(ijProperty, ec4jProperty, JSON_FIELDS, JsonCodeStyleSettings::class.java)
-      ?: trySetProperty(ijProperty, ec4jProperty, YAML_FIELDS, YAMLCodeStyleSettings::class.java)
-      ?: log.warn("Unsupported property: {}", ec4jProperty.name)
+    trySetProperty(ijProperty, ecProperty, JAVA_FIELDS, JavaCodeStyleSettings::class.java)
+      ?: trySetProperty(ijProperty, ecProperty, XML_FIELDS, XmlCodeStyleSettings::class.java)
+      ?: trySetProperty(ijProperty, ecProperty, JSON_FIELDS, JsonCodeStyleSettings::class.java)
+      ?: trySetProperty(ijProperty, ecProperty, YAML_FIELDS, YAMLCodeStyleSettings::class.java)
+      ?: log.warn("Unsupported property: {}", ecProperty.name)
   }
 
   private fun trySetProperty(
     ijProperty: String,
-    ec4jProperty: EditorConfigProperty,
+    ecProperty: ECProperty,
     fields: Map<String, Field>,
     clazz: Class<out CustomCodeStyleSettings>
   ): Field? {
@@ -74,15 +74,15 @@ class EditorConfigCodeStyleSettingsAdapter(private val codeStyleSettings: CodeSt
     val settings = codeStyleSettings.getCustomSettings(clazz)
 
     val field = fields[ijProperty]!!
-    val castedValue = toCastedValue(ec4jProperty, field)
-    logPropertyValueAssigned(ec4jProperty, castedValue)
+    val castedValue = toCastedValue(ecProperty, field)
+    logPropertyValueAssigned(ecProperty, castedValue)
 
     field[settings] = castedValue
 
     return field
   }
 
-  private fun logPropertyValueAssigned(ec4jProperty: EditorConfigProperty, castedValue: Any) =
+  private fun logPropertyValueAssigned(ec4jProperty: ECProperty, castedValue: Any) =
     log.debug(
       "Setting {} = {} ({})",
       ec4jProperty.name,
@@ -92,18 +92,18 @@ class EditorConfigCodeStyleSettingsAdapter(private val codeStyleSettings: CodeSt
 
 }
 
-private fun isInteger(property: EditorConfigProperty): Boolean {
+private fun isInteger(property: ECProperty): Boolean {
   return property.rawValue.chars().allMatch { codePoint: Int -> Character.isDigit(codePoint) }
 }
 
-private fun isBoolean(property: EditorConfigProperty): Boolean {
+private fun isBoolean(property: ECProperty): Boolean {
   return when (property.rawValue) {
     "true", "false" -> true
     else -> false
   }
 }
 
-private fun toBraceStylePropertyValue(property: EditorConfigProperty): Int {
+private fun toBraceStylePropertyValue(property: ECProperty): Int {
   return when (property.rawValue) {
     "end_of_line" -> END_OF_LINE
     "next_line" -> NEXT_LINE
@@ -114,7 +114,7 @@ private fun toBraceStylePropertyValue(property: EditorConfigProperty): Int {
   }
 }
 
-private fun toForceBracePropertyValue(property: EditorConfigProperty): Int {
+private fun toForceBracePropertyValue(property: ECProperty): Int {
   return when (property.rawValue) {
     "always" -> FORCE_BRACES_ALWAYS
     "if_multiline" -> FORCE_BRACES_IF_MULTILINE
@@ -123,7 +123,7 @@ private fun toForceBracePropertyValue(property: EditorConfigProperty): Int {
   }
 }
 
-private fun toWrapPropertyValue(property: EditorConfigProperty): Int {
+private fun toWrapPropertyValue(property: ECProperty): Int {
   return when (property.rawValue) {
     "off" -> DO_NOT_WRAP
     "normal" -> WRAP_AS_NEEDED
@@ -151,7 +151,7 @@ private fun toCommonCodeStyleSettings(
   }
 }
 
-private fun isIjProperty(property: EditorConfigProperty): Boolean {
+private fun isIjProperty(property: ECProperty): Boolean {
   return (property.name.startsWith("ij_any")
     || property.name.startsWith("ij_java")
     || property.name.startsWith("ij_xml")
@@ -183,7 +183,7 @@ private fun isScreamingCase(name: String): Boolean {
   return name.chars().allMatch { it: Int -> it == '_'.code || Character.isUpperCase(it) }
 }
 
-private fun toCastedValue(property: EditorConfigProperty, field: Field): Any {
+private fun toCastedValue(property: ECProperty, field: Field): Any {
   if (isBoolean(property)) {
     return property.rawValue.toBoolean()
   }

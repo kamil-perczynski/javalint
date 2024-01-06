@@ -4,12 +4,21 @@ import com.javalint.cli.executeCli
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+
 class MainKtTest {
 
   @Test
-  fun testCheckFormatting() {
-    val exitCode = executeCli(".mvn/**", "src/**", "!target", "--cwd", "/Users/kperczynski/IdeaProjects/augias")
+  fun testCheckFormattingWithCustomPatterns() {
+    val exitCode = executeCli(
+      ".mvn/**", "src/**", "!target", "--cwd", "/Users/kperczynski/IdeaProjects/augias"
+    )
     assertEquals(1, exitCode)
+  }
+
+  @Test
+  fun testCheckFormattingWithDefaultSettings() {
+    val exitCode = executeCli("--cwd", "/Users/kperczynski/IdeaProjects/augias")
+    assertEquals(0, exitCode)
   }
 
   @Test
