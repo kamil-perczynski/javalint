@@ -54,7 +54,7 @@ class CheckFormattingCommandEvents(private val homePath: Path) : FormatterEvents
     println(" ".repeat(132))
 
     if (reformattedFilesCount > 0) {
-      println("⚠️ Found $reformattedFilesCount files with incorrect formatting")
+      println("⛔ Found $reformattedFilesCount files with incorrect formatting")
     } else {
       println("✅ All files matched the code style")
     }

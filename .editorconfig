@@ -23,3 +23,6 @@ ij_any_parentheses_expression_new_line_after_left_paren = true
 
 ij_any_method_parameters_wrap = on_every_item
 ij_any_prefer_parameters_wrap = true
+
+[*.yaml]
+ij_yaml_spaces_within_brackets = false
