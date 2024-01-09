@@ -32,9 +32,146 @@
   <dependencies>
     <dependency>
       <groupId>com.jetbrains.intellij.platform</groupId>
+      <artifactId>ide-impl</artifactId>
+      <version>${intellij-platform.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.mozilla</groupId>
+          <artifactId>rhino-runtime</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.javadelight</groupId>
+          <artifactId>delight-rhino-sandbox</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>feedback</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-reflect</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>icons</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.codehaus.groovy</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>elevation</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>diagnostic</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>diagnostic-telemetry-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>diagnostic-start-up-performance-reporter</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>built-in-server-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>credential-store-ui</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>execution-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.opentelemetry</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.remoteDev</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>remote-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.ibm.icu</groupId>
+          <artifactId>icu4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>external-system-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>rd-community</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.xml.bind</groupId>
+          <artifactId>jaxb-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.glassfish.jaxb</groupId>
+          <artifactId>jaxb-runtime</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.jetbrains.intellij.platform</groupId>
+      <artifactId>lang-impl</artifactId>
+      <version>${intellij-platform.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>feedback</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>diff-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>icons</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.codehaus.groovy</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>rd-community</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>execution-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>diagnostic-telemetry-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.opentelemetry</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.jetbrains.intellij.platform</groupId>
       <artifactId>code-style</artifactId>
       <version>${intellij-platform.version}</version>
     </dependency>
+
     <dependency>
       <groupId>com.jetbrains.intellij.platform</groupId>
       <artifactId>code-style-impl</artifactId>
@@ -56,28 +193,11 @@
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>usage-view</artifactId>
+          <artifactId>external-system-rt</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>vcs</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>refactoring</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.java</groupId>
-          <artifactId>java-gui-forms-rt</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>resources-en</artifactId>
-        </exclusion>
-
-        <exclusion>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-codec-http2</artifactId>
+          <artifactId>external-system-dependency-updater</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -105,79 +225,35 @@
         </exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>com.jetbrains.intellij.java</groupId>
       <artifactId>java-impl</artifactId>
       <version>${intellij-platform.version}</version>
-      <scope>compile</scope>
       <exclusions>
         <exclusion>
-          <groupId>com.jetbrains.intellij.java</groupId>
-          <artifactId>java-indexing-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpmime</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-jsr223</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-json</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-templates</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-xml</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.copyright</groupId>
-          <artifactId>copyright</artifactId>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-reflect</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>statistics</artifactId>
+          <artifactId>diff-impl</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>xternal-system-impl</artifactId>
+          <artifactId>vcs-impl</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>usage-view</artifactId>
+          <artifactId>icons</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>usage-view-impl</artifactId>
+          <groupId>org.glassfish.jaxb</groupId>
+          <artifactId>jaxb-runtime</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>indexing-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>external-system</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>external-system-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>io.opentelemetry</groupId>
-          <artifactId>opentelemetry-sdk</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>structure-view-impl</artifactId>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.spellchecker</groupId>
@@ -189,35 +265,11 @@
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>built-in-server</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>credential-store-ui</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>elevation</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>diagnostic-telemetry-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.remoteDev</groupId>
-          <artifactId>remote-dev-util</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>diagnostic-start-up-performance-reporter</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
           <artifactId>execution-impl</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.bidib.com.github.markusbernhardt</groupId>
-          <artifactId>proxy-vole</artifactId>
+          <groupId>io.opentelemetry</groupId>
+          <artifactId>*</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.java</groupId>
@@ -225,68 +277,27 @@
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>rd-community</artifactId>
+          <artifactId>external-system-impl</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>vcs-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.mozilla</groupId>
-          <artifactId>rhino-runtime</artifactId>
-        </exclusion>
-        <!--
-        - com.jetbrains.intellij.platform:tracing-rt:jar:233.11799.300:runtime
-        [INFO] |  |  +- com.jetbrains.intellij.platform:diagnostic-telemetry:jar:233.11799.300:runtime
-        [INFO] |  |  +- com.jetbrains.intellij.platform:feedback:jar:233.11799.300:runtime
-        -->
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>tracing-rt</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>diagnostic-telemetry</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>feedback</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>icons</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>statistics-uploader</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>backend-observation</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>inspect</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.glassfish.jaxb</groupId>
-          <artifactId>jaxb-runtime</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-codec-http2</artifactId>
+          <artifactId>external-system</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>com.jetbrains.intellij.xml</groupId>
       <artifactId>xml-impl</artifactId>
       <version>${intellij-platform.version}</version>
-      <scope>compile</scope>
       <exclusions>
         <exclusion>
-          <groupId>com.jetbrains.intellij.xml</groupId>
-          <artifactId>xml-structure-view-impl</artifactId>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>web-symbols</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jetbrains.intellij.platform</groupId>
+          <artifactId>icons</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.spellchecker</groupId>
@@ -294,34 +305,11 @@
         </exclusion>
         <exclusion>
           <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>built-in-server-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>built-in-server</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
           <artifactId>execution-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>icons</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>analysis-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>indexing-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jetbrains.intellij.platform</groupId>
-          <artifactId>web-symbols</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -357,6 +345,7 @@
           </execution>
         </executions>
       </plugin>
+
     </plugins>
   </build>
 
