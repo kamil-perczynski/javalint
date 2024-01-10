@@ -14,6 +14,7 @@
     <module>javalint-cli</module>
     <module>javalint-ec4j-plugin</module>
     <module>javalint-ec4j</module>
+    <module>javalint-codegen</module>
   </modules>
 
   <properties>

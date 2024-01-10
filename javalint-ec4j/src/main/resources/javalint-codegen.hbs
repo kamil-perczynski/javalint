@@ -1,0 +1,49 @@
+package {{outputPackage}};
+
+import javax.annotation.processing.Generated
+
+import com.javalint.ec.settings.ECProperty
+import com.javalint.ec.settings.toWrapPropertyValue
+import com.javalint.ec.settings.toForceBracePropertyValue
+import com.javalint.ec.settings.toBraceStylePropertyValue
+import {{className}}
+
+@Suppress("DEPRECATION")
+@SuppressWarnings
+@Generated("JavaLint CodeGen")
+class {{outputClassName}} {
+
+  fun setProperty(settings: {{simpleName}}, property: ECProperty): Boolean? {
+    return when (property.name) {
+      {{~#each fields}}
+      "{{externalName}}" ->
+        {{~#if isInteger}}{
+          settings.{{name}} =
+          {{~#if isWrapConstant~}}
+           toWrapPropertyValue(property)
+          {{~else if isBraceStyleConstant~}}
+           toBraceStylePropertyValue(property)
+          {{~else if toForceBracePropertyValue~}}
+           toForceBracePropertyValue(property)
+          {{~else~}}
+           property.rawValue.toInt()
+          {{~/if}}
+          true
+        }
+        {{~else if isString}}{
+          settings.{{name}} = property.rawValue
+          true
+        }
+        {{~else if isBoolean}}{
+          settings.{{name}} = property.rawValue.toBoolean()
+          true
+        }
+        {{else~}}
+        TODO("Unsupported property") // settings.{{name}} = property.rawValue
+        {{~/if~}}
+      {{~/each~}}
+      else -> null
+    }
+  }
+
+}
