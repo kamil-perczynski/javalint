@@ -3,7 +3,6 @@ package com.javalint.ec.settings
 import org.ec4j.core.ResourceProperties
 import org.ec4j.core.model.Property
 import java.nio.file.Path
-import java.util.stream.Collectors
 
 class ParsedECProperties(private val resourceProperties: ResourceProperties) : ECSource {
 
@@ -18,7 +17,7 @@ fun toEditorConfigCodeStyle(resourceProperties: ResourceProperties): List<ECProp
 
   return properties.values.stream()
     .map(::toEditorConfigProperty)
-    .collect(Collectors.toList())
+    .toList()
 }
 
 private fun toEditorConfigProperty(property: Property): ECProperty {

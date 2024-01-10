@@ -60,6 +60,44 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <id>execute-codegen</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <includePluginDependencies>true</includePluginDependencies>
+              <mainClass>com.javalint.codegen.JavaLintCodegen</mainClass>
+              <arguments>
+                <argument>${project.basedir}</argument>
+                <argument>${project.build.directory}/generated-sources/annotations</argument>
+                <argument>com.javalint.ec.settings.lang</argument>
+                <argument>src/main/resources/javalint-codegen.hbs</argument>
+                <argument>
+                  com.intellij.psi.codeStyle.CommonCodeStyleSettings,
+                  com.intellij.psi.codeStyle.JavaCodeStyleSettings,
+                  com.intellij.psi.formatter.xml.XmlCodeStyleSettings,
+                  com.intellij.json.formatter.JsonCodeStyleSettings,
+                  org.jetbrains.yaml.formatter.YAMLCodeStyleSettings
+                </argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.javalint</groupId>
+            <artifactId>javalint-codegen</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
     </plugins>
   </build>
 
