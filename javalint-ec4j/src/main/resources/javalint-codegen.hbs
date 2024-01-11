@@ -18,15 +18,14 @@ class {{outputClassName}} {
       {{~#each fields}}
       "{{externalName}}" ->
         {{~#if isInteger}}{
-          settings.{{name}} =
-          {{~#if isWrapConstant~}}
-           toWrapPropertyValue(property)
+          {{#if isWrapConstant~}}
+           settings.{{name}} = toWrapPropertyValue(property)
           {{~else if isBraceStyleConstant~}}
-           toBraceStylePropertyValue(property)
+           settings.{{name}} = toBraceStylePropertyValue(property)
           {{~else if toForceBracePropertyValue~}}
-           toForceBracePropertyValue(property)
+           settings.{{name}} = toForceBracePropertyValue(property)
           {{~else~}}
-           property.rawValue.toInt()
+           settings.{{name}} = property.rawValue.toInt()
           {{~/if}}
           true
         }
@@ -41,7 +40,7 @@ class {{outputClassName}} {
         {{else~}}
         TODO("Unsupported property") // settings.{{name}} = property.rawValue
         {{~/if~}}
-      {{~/each~}}
+      {{~/each}}
       else -> null
     }
   }

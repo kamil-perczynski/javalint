@@ -42,10 +42,7 @@ class ECCodeStyleSettingsAdapter(private val codeStyleSettings: CodeStyleSetting
 
     val parsedProperty = ECProperty(ijProperty, ecProperty.rawValue)
 
-    commonECCodeStyleAdapter.setProperty(
-      commonSettings,
-      parsedProperty
-    )
+    commonECCodeStyleAdapter.setProperty(commonSettings, parsedProperty)
       ?: javaECCodeStyleAdapter.setProperty(
         codeStyleSettings.getCustomSettings(JavaCodeStyleSettings::class.java),
         parsedProperty
