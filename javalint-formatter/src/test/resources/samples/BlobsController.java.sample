@@ -1,0 +1,158 @@
+package perczynski.kamil.augias.api.docker;
+
+import io.vertx.core.http.HttpMethod;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
+import jakarta.inject.Inject;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import perczynski.kamil.augias.lib.http.VertxController;
+import perczynski.kamil.augias.lib.http.routes.Routes;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+
+import static io.netty.handler.codec.http.HttpHeaderNames.RANGE;
+import static io.netty.handler.codec.http.HttpResponseStatus.*;
+import static io.vertx.core.http.HttpHeaders.*;
+import static perczynski.kamil.augias.api.docker.DockerHeaders.DOCKER_CONTENT_DIGEST;
+import static perczynski.kamil.augias.api.docker.DockerHeaders.DOCKER_UPLOAD_UUID;
+
+@Slf4j
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class BlobsController implements VertxController {
+
+  private final Map<String, String> blobs = new HashMap<>();
+
+  private static String toFormattedMegabytes(long bytesCount) {
+    final String megabytes = NumberFormat
+      .getInstance(Locale.ENGLISH)
+      .format(bytesCount / 1000_000d);
+
+    return STR."\{megabytes}MB";
+  }
+
+  private static String toChunkUploadLocation(String blobId) {
+    return STR."/v2/nginx/blobs/uploads/\{blobId}";
+  }
+
+  @Override
+  public void registerRoutes(Router router, Routes routes) {
+    router
+      .route(HttpMethod.HEAD, "/v2/:image/blobs/:digest")
+      .handler(
+        routes
+          .asyncRoute()
+          .route(this::checkLayerExists)
+      );
+
+    router
+      .route(HttpMethod.POST, "/v2/:image/blobs/uploads")
+      .handler(
+        routes
+          .asyncRoute()
+          .route(this::initializeLayerUploadPush)
+      );
+
+    router
+      .route(HttpMethod.PATCH, "/v2/:image/blobs/uploads/:uploadId")
+      .handler(
+        routes
+          .largeBodyRoute()
+          .route(file -> routes
+            .asyncRoute()
+            .route(event -> receiveLayerChunkUpload(event, file))
+          )
+      );
+
+    router
+      .route(HttpMethod.PUT, "/v2/:image/blobs/uploads/:blobId")
+      .handler(routes
+        .asyncRoute()
+        .route(this::confirmLayerUpload));
+  }
+
+  private void confirmLayerUpload(RoutingContext event) {
+    final String image = event.pathParam("image");
+    final String blobId = event.pathParam("blobId");
+
+    log.info("Confirming upload of blob: {}", blobId);
+
+    final String digest = event
+      .queryParam("digest")
+      .getFirst();
+
+    blobs.put(digest, blobId);
+
+    event
+      .response()
+      .setStatusCode(CREATED.code())
+      .putHeader(LOCATION, String.format("/v2/%s/blobs/%s", image, blobId))
+      .putHeader(DOCKER_CONTENT_DIGEST, digest)
+      .putHeader(CONTENT_LENGTH, "0")
+      .end();
+  }
+
+  private void checkLayerExists(RoutingContext event) {
+    final String digest = event.pathParam("digest");
+    log.info("Checking if blob: {} exists", digest);
+
+    final boolean layerExists = blobs.containsKey(digest);
+
+    log.debug("Blob: {} exists: {}", digest, layerExists);
+    event
+      .response()
+      .putHeader(DOCKER_CONTENT_DIGEST, digest)
+      .putHeader(
+        CONTENT_LENGTH,
+        "0"
+      )
+      .setStatusCode(layerExists ? OK.code() : NOT_FOUND.code())
+      .end();
+  }
+
+  private void initializeLayerUploadPush(RoutingContext event) {
+    log.info("Starting upload of the blob");
+    final String uploadId = UUID
+      .randomUUID()
+      .toString();
+
+    event
+      .response()
+      .setStatusCode(ACCEPTED.code())
+      .putHeader(CONTENT_TYPE, "application/json")
+      .putHeader(LOCATION, toChunkUploadLocation(uploadId))
+      .putHeader(DOCKER_UPLOAD_UUID, uploadId)
+      .putHeader(CONTENT_LENGTH, "0")
+      .end();
+  }
+
+  @SneakyThrows
+  private void receiveLayerChunkUpload(RoutingContext event, Path bodyFile) {
+    final String uploadId = event.pathParam("uploadId");
+
+    final long fileSize = Files.size(bodyFile);
+    log.debug(
+      "Incoming upload: {} chunk: {} buffer size: {}",
+      uploadId,
+      0,
+      toFormattedMegabytes(fileSize)
+    );
+
+    event
+      .response()
+      .setStatusCode(ACCEPTED.code())
+      .putHeader(RANGE, "0-" + (fileSize - 1))
+      .putHeader(LOCATION, toChunkUploadLocation(uploadId))
+      .putHeader(DOCKER_UPLOAD_UUID, uploadId)
+      .putHeader(CONTENT_LENGTH, "0")
+      .end();
+  }
+
+}

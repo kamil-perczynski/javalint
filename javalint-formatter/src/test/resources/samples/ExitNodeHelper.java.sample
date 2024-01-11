@@ -1,0 +1,73 @@
+package perczynski.kamil.torexitaddresses;
+
+import org.springframework.stereotype.Component;
+import perczynski.kamil.torexitaddresses.parser.ExitAddress;
+import perczynski.kamil.torexitaddresses.parser.ExitNode;
+
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+@Component
+public class ExitNodeHelper {
+
+    public Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final AtomicInteger counter = new AtomicInteger();
+
+        private String nodeId;
+        private Instant published;
+        private Instant lastStatus;
+        private Set<ExitAddress> addresses;
+
+        private Builder() {
+            int nonce = counter.incrementAndGet();
+            this.nodeId = "node-" + nonce;
+            this.published = Instant.now();
+            this.lastStatus = Instant.now();
+            this.addresses = Collections.singleton(
+                    new ExitAddress(randomIp(), Instant.now())
+            );
+        }
+
+        public Builder nodeId(String nodeId) {
+            this.nodeId = nodeId;
+            return this;
+        }
+
+        public Builder published(Instant published) {
+            this.published = published;
+            return this;
+        }
+
+        public Builder lastStatus(Instant lastStatus) {
+            this.lastStatus = lastStatus;
+            return this;
+        }
+
+        public Builder addresses(Set<ExitAddress> addresses) {
+            this.addresses = addresses;
+            return this;
+        }
+
+        public ExitNode build() {
+            return new ExitNode(nodeId, published, lastStatus, addresses);
+        }
+
+    }
+
+    public static String randomIp() {
+        return IntStream.range(0, 4)
+                .map(i -> (int) (Math.random() * 255))
+                .mapToObj(Integer::toString)
+                .collect(Collectors.joining("."));
+    }
+
+}
