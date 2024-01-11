@@ -141,7 +141,6 @@ class IntellijFormatter(private val options: IntellijFormatterOptions) {
     options.formatterEvents.fileFormattingStarted(relativeFile)
 
     val originalContent = psiFile.textToCharArray()
-
     val reformattedElement = codeStyleManager.reformat(psiFile)
 
     val isModified = !psiFile.textToCharArray().contentEquals(originalContent)
@@ -158,7 +157,6 @@ class IntellijFormatter(private val options: IntellijFormatterOptions) {
     val virtualFile = toLocalVirtualFile(virtualFileManager, absoluteFilePath.toString())
 
     if (virtualFile.fileType.isBinary) {
-      options.formatterEvents.fileIgnored(relativeFile)
       return null
     }
 
