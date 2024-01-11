@@ -26,7 +26,7 @@ public class JavaLintCodegenContext {
   }
 
   public String getClassName() {
-    return clazz.getName();
+    return clazz.getName().replace('$', '.');
   }
 
   public String getSimpleName() {
@@ -38,7 +38,9 @@ public class JavaLintCodegenContext {
   }
 
   public String getOutputClassName() {
-    return clazz.getSimpleName().replace("CodeStyleSettings", "ECCodeStyleAdapter");
+    return clazz.getSimpleName()
+      .replace('$', '.')
+      .replace("CodeStyleSettings", "") + "ECCodeStyleAdapter";
   }
 
 }

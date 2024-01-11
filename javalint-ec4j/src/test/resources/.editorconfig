@@ -1,0 +1,34 @@
+root = true
+
+[*]
+charset = latin1
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+end_of_line = lf
+insert_final_newline = true
+max_line_length = 100
+
+[*.{java,kt}]
+ij_any_method_call_chain_wrap = on_every_item
+ij_any_wrap_first_method_in_call_chain = true
+ij_any_call_parameters_wrap = split_into_lines
+
+ij_any_method_parameters_wrap = on_every_item
+ij_any_prefer_parameters_wrap = true
+
+ij_any_ternary_operation_signs_on_next_line = true
+ij_any_ternary_operation_wrap = on_every_item
+
+[*.java]
+ij_java_align_multiline_records = true
+ij_java_record_components_wrap = split_into_lines
+
+[*.yaml]
+ij_yaml_indent_size = 2
+ij_yaml_indent_sequence_value = false
+
+[*.xml]
+ij_xml_indent_size = 3
+ij_xml_attribute_wrap = split_into_lines
+ij_xml_keep_whitespaces = true

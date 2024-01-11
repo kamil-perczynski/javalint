@@ -6,7 +6,6 @@ import com.javalint.formatter.IntellijFormatter
 import com.javalint.formatter.IntellijFormatterOptions
 import com.javalint.formatter.output.FixFormattingCommandEvents
 import java.nio.CharBuffer
-import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.Callable
@@ -31,13 +30,13 @@ class FixFormattingCommand(
     formatterEvents.formattingStarted()
 
     for (path in paths) {
-      formatter.formatFile(path, codeStyle) { file, formattedEl ->
-        threadPool.submit {
-          val byteBuffer = StandardCharsets.UTF_8.encode(
-            CharBuffer.wrap(formattedEl.textToCharArray())
-          )
+      formatter.formatFile(path, codeStyle) { _, el ->
+        val charBuffer = CharBuffer.wrap(el.textToCharArray())
 
-          Files.write(projectRoot.resolve(file), byteBuffer.toByteArray())
+        threadPool.submit {
+          val byteBuffer = codeStyle.charset(path).encode(charBuffer)
+
+          Files.write(projectRoot.resolve(path), byteBuffer.toByteArray())
         }
       }
     }

@@ -6,7 +6,6 @@ import com.javalint.formatter.IntellijFormatter;
 import com.javalint.formatter.IntellijFormatterOptions;
 import org.ec4j.core.ResourceProperties;
 import org.ec4j.lint.api.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,7 +45,9 @@ public class JavaLintLinter implements Linter {
                       ViolationHandler violationHandler) {
     ensureResourceIsRead(resource);
 
-    final ECCodeStyle javaLintCodeStyle = toECCodeStyle(resourceProperties);
+    final ECCodeStyle javaLintCodeStyle = new ECCodeStyle(
+      new ParsedECProperties(resourceProperties)
+    );
 
     formatter.formatFile(resource.getPath(), javaLintCodeStyle, (path, psiElement) -> {
       final Violation violation = new Violation(
@@ -60,13 +61,6 @@ public class JavaLintLinter implements Linter {
       violationHandler.handle(violation);
       return null;
     });
-  }
-
-  @NotNull
-  private ECCodeStyle toECCodeStyle(ResourceProperties resourceProperties) {
-    return new ECCodeStyle(
-      new ParsedECProperties(resourceProperties)
-    );
   }
 
   private static void ensureResourceIsRead(Resource resource) {

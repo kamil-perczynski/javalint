@@ -81,6 +81,7 @@
                 <argument>src/main/resources/javalint-codegen.hbs</argument>
                 <argument>
                   com.intellij.psi.codeStyle.CommonCodeStyleSettings,
+                  com.intellij.psi.codeStyle.CommonCodeStyleSettings$IndentOptions,
                   com.intellij.psi.codeStyle.JavaCodeStyleSettings,
                   com.intellij.psi.formatter.xml.XmlCodeStyleSettings,
                   com.intellij.json.formatter.JsonCodeStyleSettings,

@@ -2,6 +2,7 @@ package com.javalint.ec.settings
 
 import org.ec4j.core.ResourceProperties
 import org.ec4j.core.model.Property
+import org.ec4j.core.model.PropertyType
 import java.nio.file.Path
 
 class ParsedECProperties(private val resourceProperties: ResourceProperties) : ECSource {
@@ -10,7 +11,14 @@ class ParsedECProperties(private val resourceProperties: ResourceProperties) : E
     return toEditorConfigCodeStyle(resourceProperties)
   }
 
+  override fun charset(file: Path): String {
+    return resourceProperties.getValue(PropertyType.charset, "utf-8", true)
+  }
+
 }
+
+fun findCharsetProperty(ecFileProps: ResourceProperties): String =
+  ecFileProps.getValue(PropertyType.charset, "utf-8", true)
 
 fun toEditorConfigCodeStyle(resourceProperties: ResourceProperties): List<ECProperty> {
   val properties = resourceProperties.properties
