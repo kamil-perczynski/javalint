@@ -21,6 +21,7 @@ private val xmlECCodeStyleAdapter = XmlECCodeStyleAdapter()
 private val jsonECCodeStyleAdapter = JsonECCodeStyleAdapter()
 private val yamlECCodeStyleAdapter = YAMLECCodeStyleAdapter()
 private val commonECCodeStyleAdapter = CommonECCodeStyleAdapter()
+private val indentOptionsECCodeStyleAdapter = IndentOptionsECCodeStyleAdapter()
 
 class ECCodeStyleSettingsAdapter(private val codeStyleSettings: CodeStyleSettings) {
 
@@ -43,6 +44,7 @@ class ECCodeStyleSettingsAdapter(private val codeStyleSettings: CodeStyleSetting
     val parsedProperty = ECProperty(ijProperty, ecProperty.rawValue)
 
     commonECCodeStyleAdapter.setProperty(commonSettings, parsedProperty)
+      ?: indentOptionsECCodeStyleAdapter.setProperty(commonSettings.indentOptions!!, parsedProperty)
       ?: javaECCodeStyleAdapter.setProperty(
         codeStyleSettings.getCustomSettings(JavaCodeStyleSettings::class.java),
         parsedProperty
