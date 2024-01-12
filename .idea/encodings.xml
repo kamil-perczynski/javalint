@@ -5,10 +5,10 @@
     <file url="file://$PROJECT_DIR$/javalint-cli/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-codegen/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-codegen/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/javalint-ec4j-plugin/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/javalint-ec4j-plugin/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/javalint-ec4j/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/javalint-ec4j/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javalint-ec/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javalint-ec/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javalint-ec4j-linter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javalint-ec4j-linter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-formatter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-formatter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
