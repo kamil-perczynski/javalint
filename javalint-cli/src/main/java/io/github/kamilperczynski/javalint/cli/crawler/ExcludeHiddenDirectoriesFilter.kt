@@ -1,4 +1,4 @@
-package io.github.kamilperczynski.javalint.cli.gitignore
+package io.github.kamilperczynski.javalint.cli.crawler
 
 import java.nio.file.Path
 import kotlin.io.path.isHidden

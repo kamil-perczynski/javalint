@@ -1,4 +1,4 @@
-package io.github.kamilperczynski.javalint.cli.gitignore
+package io.github.kamilperczynski.javalint.cli.crawler
 
 import java.io.IOException
 import java.nio.file.FileVisitResult

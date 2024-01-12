@@ -48,7 +48,9 @@ public class CodegenField {
   }
 
   public String getExternalName() {
-    final Class<Annotation> propertyClass = JavaLintCodegen.toClazz("com.intellij.configurationStore.Property");
+    final Class<Annotation> propertyClass = JavaLintCodegen.toClazz(
+      "com.intellij.configurationStore.Property"
+    );
 
     final Annotation propertyAnnotation = field.getAnnotation(propertyClass);
 

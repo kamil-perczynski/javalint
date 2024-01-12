@@ -1,7 +1,7 @@
 package io.github.kamilperczynski.javalint.cli.pathpatterns
 
-import io.github.kamilperczynski.javalint.cli.gitignore.JavaLintPathPattern
-import io.github.kamilperczynski.javalint.cli.gitignore.parseCliJavaLintPathPattern
+import io.github.kamilperczynski.javalint.cli.crawler.JavaLintPathPattern
+import io.github.kamilperczynski.javalint.cli.crawler.parseCliJavaLintPathPattern
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths

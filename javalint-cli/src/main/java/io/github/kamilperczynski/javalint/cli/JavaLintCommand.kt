@@ -4,7 +4,7 @@ package io.github.kamilperczynski.javalint.cli
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import io.github.kamilperczynski.javalint.cli.commands.CheckFormattingCommand
 import io.github.kamilperczynski.javalint.cli.commands.FixFormattingCommand
-import io.github.kamilperczynski.javalint.cli.gitignore.*
+import io.github.kamilperczynski.javalint.cli.crawler.*
 import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import io.github.kamilperczynski.javalint.ec.ECCodeStyle
 import io.github.kamilperczynski.javalint.ec.ECFile
