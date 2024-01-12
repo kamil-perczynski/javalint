@@ -43,20 +43,16 @@ class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
           log.trace("Charset property is ignored by ECCodeStyle")
 
         "indent_style" -> {
-          settings.indentOptions.USE_TAB_CHARACTER = toUseTabs(property.rawValue)
           executeForAllCommonSettings(settings) {
             it.indentOptions!!.USE_TAB_CHARACTER = toUseTabs(property.rawValue)
           }
         }
 
-
         "tab_width" -> {
-          settings.indentOptions.TAB_SIZE = property.rawValue.toInt()
           executeForAllCommonSettings(settings) {
             it.indentOptions!!.TAB_SIZE = property.rawValue.toInt()
           }
         }
-
 
         "trim_trailing_whitespace" ->
           log.trace("Trailing whitespace is obligatory trimmed by IJ")
@@ -69,9 +65,6 @@ class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
             break
           }
 
-          settings.indentOptions.INDENT_SIZE = property.rawValue.toInt()
-          settings.indentOptions.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
-
           executeForAllCommonSettings(settings) {
             it.indentOptions!!.INDENT_SIZE = property.rawValue.toInt()
             it.indentOptions!!.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
@@ -83,7 +76,6 @@ class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
             break
           }
 
-          settings.indentOptions.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
           executeForAllCommonSettings(settings) {
             it.indentOptions!!.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
           }
@@ -108,6 +100,7 @@ class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
     rootSettings: CodeStyleSettings,
     fn: (commonSettings: CommonCodeStyleSettings) -> Unit
   ) {
+    fn.invoke(rootSettings)
     fn.invoke(rootSettings.getCommonSettings(JavaLanguage.INSTANCE))
     fn.invoke(rootSettings.getCommonSettings(XMLLanguage.INSTANCE))
     fn.invoke(rootSettings.getCommonSettings(JsonLanguage.INSTANCE))
