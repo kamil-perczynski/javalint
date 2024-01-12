@@ -1,0 +1,58 @@
+package {{outputPackage}};
+
+import javax.annotation.processing.Generated
+
+import io.github.kamilperczynski.javalint.ec.ECProperty
+import io.github.kamilperczynski.javalint.ec.toWrapPropertyValue
+import io.github.kamilperczynski.javalint.ec.toForceBracePropertyValue
+import io.github.kamilperczynski.javalint.ec.toBraceStylePropertyValue
+import io.github.kamilperczynski.javalint.formatter.logging.Slf4j
+import {{className}}
+
+@Suppress("DEPRECATION")
+@SuppressWarnings
+@Generated("JavaLint CodeGen")
+class {{outputClassName}} {
+
+  companion object : Slf4j()
+
+  fun setProperty(settings: {{simpleName}}, ecProperty: ECProperty): Any? {
+    val assignedValue = when (ecProperty.name) {
+      {{~#each fields}}
+      "{{externalName}}" ->
+        {{~#if isInteger}}{
+          {{#if isWrapConstant~}}
+           val value = toWrapPropertyValue(ecProperty)
+          {{~else if isBraceStyleConstant~}}
+           val value = toBraceStylePropertyValue(ecProperty)
+          {{~else if toForceBracePropertyValue~}}
+           val value = toForceBracePropertyValue(ecProperty)
+          {{~else~}}
+           val value = ecProperty.rawValue.toInt()
+          {{~/if}}
+          settings.{{name}} = value
+          value
+        }
+        {{~else if isString}}{
+          settings.{{name}} = ecProperty.rawValue
+          ecProperty.rawValue
+        }
+        {{~else if isBoolean}}{
+          settings.{{name}} = ecProperty.rawValue.toBoolean()
+          ecProperty.rawValue.toBoolean()
+        }
+        {{else~}}
+        TODO("Unsupported property") // settings.{{name}} = ecProperty.rawValue
+        {{~/if~}}
+      {{~/each}}
+      else -> null
+    }
+
+    if (assignedValue != null) {
+      log.debug("Setting code-style property: {} = {}", ecProperty.name, assignedValue)
+    }
+
+    return assignedValue
+  }
+
+}
