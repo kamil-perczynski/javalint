@@ -6,8 +6,8 @@ import io.github.kamilperczynski.javalint.cli.commands.CheckFormattingCommand
 import io.github.kamilperczynski.javalint.cli.commands.FixFormattingCommand
 import io.github.kamilperczynski.javalint.cli.crawler.*
 import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
-import io.github.kamilperczynski.javalint.ec.ECCodeStyle
-import io.github.kamilperczynski.javalint.ec.ECFile
+import io.github.kamilperczynski.javalint.formatter.ec.ECCodeStyle
+import io.github.kamilperczynski.javalint.formatter.ec.ECFile
 import picocli.CommandLine.*
 import java.nio.file.Files
 import java.nio.file.Path

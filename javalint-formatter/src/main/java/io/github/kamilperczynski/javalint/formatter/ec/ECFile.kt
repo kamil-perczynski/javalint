@@ -1,12 +1,15 @@
-package io.github.kamilperczynski.javalint.ec
+package io.github.kamilperczynski.javalint.formatter.ec
 
 import org.ec4j.core.*
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 
-class ECFile(private val projectRoot: Path) : ECSource {
+class ECFile(
+  private val projectRoot: Path,
+  ecFileName: String = ".editorconfig"
+) : ECSource {
 
-  private var ecPropsService = createResourcePropertiesService(projectRoot)
+  private var ecPropsService = createResourcePropertiesService(projectRoot, ecFileName)
 
   override fun findECProps(file: Path): List<ECProperty> {
     val fullFilePath = projectRoot.resolve(file)
@@ -30,10 +33,11 @@ class ECFile(private val projectRoot: Path) : ECSource {
 
 }
 
-private fun createResourcePropertiesService(projectRoot: Path): ResourcePropertiesService {
+private fun createResourcePropertiesService(projectRoot: Path, ecFileName: String): ResourcePropertiesService {
   return ResourcePropertiesService.builder()
     .cache(Cache.Caches.permanent())
     .loader(EditorConfigLoader.default_())
+    .configFileName(ecFileName)
     .rootDirectory(
       ResourcePath.ResourcePaths.ofPath(projectRoot, StandardCharsets.UTF_8)
     )

@@ -4,7 +4,6 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings.IndentOptions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption.CREATE
@@ -19,11 +18,12 @@ class IntellijFormatterTest {
     @JvmStatic
     @BeforeAll
     fun setUp() {
-      baseDir = Files.createTempDirectory("IntellijFormatterTest");
+      baseDir = Files.createTempDirectory("IntellijFormatterTest")
 
       formatter = IntellijFormatter(
         IntellijFormatterOptions(baseDir, NoopFormattingEvents.INSTANCE)
       )
+
     }
   }
 
@@ -39,7 +39,7 @@ class IntellijFormatterTest {
 
     // when & then:
     formatter.formatFile(outfile, codeStyle) { _, el ->
-      fail(String(el.textToCharArray()))
+      assertEquals(source, String(el.textToCharArray()))
     }
   }
 
@@ -74,7 +74,7 @@ class IntellijFormatterTest {
 
     // when & then:
     formatter.formatFile(outfile, codeStyle) { _, el ->
-      fail(String(el.textToCharArray()))
+      assertEquals(source, String(el.textToCharArray()))
     }
   }
 
@@ -90,7 +90,7 @@ class IntellijFormatterTest {
 
     // when & then:
     formatter.formatFile(outfile, codeStyle) { _, el ->
-      fail(String(el.textToCharArray()))
+      assertEquals(source, String(el.textToCharArray()))
     }
   }
 

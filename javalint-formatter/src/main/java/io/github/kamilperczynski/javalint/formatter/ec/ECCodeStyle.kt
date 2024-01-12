@@ -1,11 +1,16 @@
-package io.github.kamilperczynski.javalint.ec
+package io.github.kamilperczynski.javalint.formatter.ec
 
+import com.intellij.json.JsonLanguage
+import com.intellij.lang.java.JavaLanguage
+import com.intellij.lang.xml.XMLLanguage
 import com.intellij.psi.codeStyle.CodeStyleDefaults
 import com.intellij.psi.codeStyle.CodeStyleSettings
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings.IndentOptions
 import com.intellij.util.LineSeparator
 import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import io.github.kamilperczynski.javalint.formatter.logging.Slf4j
+import org.jetbrains.yaml.YAMLLanguage
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
@@ -37,11 +42,21 @@ class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
         "charset" ->
           log.trace("Charset property is ignored by ECCodeStyle")
 
-        "indent_style" ->
+        "indent_style" -> {
           settings.indentOptions.USE_TAB_CHARACTER = toUseTabs(property.rawValue)
+          executeForAllCommonSettings(settings) {
+            it.indentOptions!!.USE_TAB_CHARACTER = toUseTabs(property.rawValue)
+          }
+        }
 
-        "tab_width" ->
+
+        "tab_width" -> {
           settings.indentOptions.TAB_SIZE = property.rawValue.toInt()
+          executeForAllCommonSettings(settings) {
+            it.indentOptions!!.TAB_SIZE = property.rawValue.toInt()
+          }
+        }
+
 
         "trim_trailing_whitespace" ->
           log.trace("Trailing whitespace is obligatory trimmed by IJ")
@@ -50,15 +65,27 @@ class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
           log.trace("insert_final_newline is not supported by IJ. https://youtrack.jetbrains.com/issue/IDEA-320289")
 
         "indent_size" -> {
-          if (isNumber(property.rawValue)) {
-            settings.indentOptions.INDENT_SIZE = property.rawValue.toInt()
-            settings.indentOptions.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
+          if (!isNumber(property.rawValue)) {
+            break
+          }
+
+          settings.indentOptions.INDENT_SIZE = property.rawValue.toInt()
+          settings.indentOptions.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
+
+          executeForAllCommonSettings(settings) {
+            it.indentOptions!!.INDENT_SIZE = property.rawValue.toInt()
+            it.indentOptions!!.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
           }
         }
 
         "ij_continuation_indent_size" -> {
-          if (isDefaultContinuationIndentSize(settings.indentOptions)) {
-            settings.indentOptions.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
+          if (!isDefaultContinuationIndentSize(settings.indentOptions)) {
+            break
+          }
+
+          settings.indentOptions.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
+          executeForAllCommonSettings(settings) {
+            it.indentOptions!!.CONTINUATION_INDENT_SIZE = property.rawValue.toInt()
           }
         }
 
@@ -75,6 +102,16 @@ class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
     }
 
     return settings
+  }
+
+  private fun executeForAllCommonSettings(
+    rootSettings: CodeStyleSettings,
+    fn: (commonSettings: CommonCodeStyleSettings) -> Unit
+  ) {
+    fn.invoke(rootSettings.getCommonSettings(JavaLanguage.INSTANCE))
+    fn.invoke(rootSettings.getCommonSettings(XMLLanguage.INSTANCE))
+    fn.invoke(rootSettings.getCommonSettings(JsonLanguage.INSTANCE))
+    fn.invoke(rootSettings.getCommonSettings(YAMLLanguage.INSTANCE))
   }
 
 }
