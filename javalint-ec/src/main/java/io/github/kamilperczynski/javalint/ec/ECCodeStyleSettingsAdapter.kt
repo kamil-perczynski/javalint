@@ -9,9 +9,8 @@ import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings
 import com.intellij.psi.formatter.xml.XmlCodeStyleSettings
-import io.github.kamilperczynski.javalint.ec.settings.lang.*
+import io.github.kamilperczynski.javalint.ec.lang.*
 import io.github.kamilperczynski.javalint.formatter.logging.Slf4j
-import io.github.kamilperczynski.javalint.ec.settings.lang.*
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.formatter.YAMLCodeStyleSettings
 import java.util.*

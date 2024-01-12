@@ -3,7 +3,6 @@ package io.github.kamilperczynski.javalint.cli.commands
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
 import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
-import io.github.kamilperczynski.javalint.formatter.output.CheckFormattingCommandEvents
 import java.nio.file.Path
 import java.util.concurrent.Callable
 import kotlin.math.min

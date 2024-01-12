@@ -4,6 +4,7 @@ import io.github.kamilperczynski.javalint.ec.ECCodeStyle;
 import io.github.kamilperczynski.javalint.ec.ParsedECProperties;
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter;
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions;
+import io.github.kamilperczynski.javalint.formatter.NoopFormattingEvents;
 import org.ec4j.core.ResourceProperties;
 import org.ec4j.lint.api.*;
 

@@ -70,7 +70,7 @@ Flags:
   customSynopsis = [""],
   sortOptions = false,
   mixinStandardHelpOptions = true,
-  versionProvider = io.github.kamilperczynski.javalint.cli.JavaLintVersionProvider::class
+  versionProvider = JavaLintVersionProvider::class
 )
 class JavaLintCommand : Callable<Int> {
   @Spec
@@ -157,13 +157,13 @@ class JavaLintCommand : Callable<Int> {
     val projectRoot = Paths.get(cwd).toAbsolutePath().normalize()
 
     val pathsFilter: PathsFilter =
-      io.github.kamilperczynski.javalint.cli.toPathsFilter(projectRoot, patterns)
+      toPathsFilter(projectRoot, patterns)
     val paths = discoverProjectFiles(projectRoot, pathsFilter)
 
     val javaLintCodeStyle = if (Files.exists(projectRoot.resolve(".editorconfig")))
       ECCodeStyle(ECFile(projectRoot))
     else
-      io.github.kamilperczynski.javalint.cli.DefaultIjCodeStyle.INSTANCE
+      DefaultIjCodeStyle.INSTANCE
 
     return if (format)
       FixFormattingCommand(projectRoot, paths, javaLintCodeStyle).call()
@@ -175,13 +175,13 @@ class JavaLintCommand : Callable<Int> {
 
 private fun toPathsFilter(projectRoot: Path, cliPatterns: List<String>): PathsFilter {
   if (cliPatterns.isEmpty()) {
-    return io.github.kamilperczynski.javalint.cli.defaultPathsFilter
+    return defaultPathsFilter
   }
 
   val javaLintPatterns = JavaLintPathPatterns(
     cliPatterns.stream()
       .map(::parseCliJavaLintPathPattern)
-      .sorted(Comparator.comparing { io.github.kamilperczynski.javalint.cli.patternTypesPriority.indexOf(it.type) })
+      .sorted(Comparator.comparing { patternTypesPriority.indexOf(it.type) })
       .collect(toList())
   )
   return JavaLintPatternPathFilter(projectRoot, javaLintPatterns)

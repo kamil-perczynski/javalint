@@ -62,7 +62,7 @@
               <arguments>
                 <argument>${project.basedir}</argument>
                 <argument>${project.build.directory}/generated-sources/annotations</argument>
-                <argument>io.github.kamilperczynski.javalint.ec.settings.lang</argument>
+                <argument>io.github.kamilperczynski.javalint.ec.lang</argument>
                 <argument>src/main/resources/javalint-codegen.hbs</argument>
                 <argument>
                   com.intellij.psi.codeStyle.CommonCodeStyleSettings,

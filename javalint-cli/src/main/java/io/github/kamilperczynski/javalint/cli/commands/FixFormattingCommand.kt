@@ -4,7 +4,6 @@ import com.intellij.util.io.toByteArray
 import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
-import io.github.kamilperczynski.javalint.formatter.output.FixFormattingCommandEvents
 import java.nio.CharBuffer
 import java.nio.file.Files
 import java.nio.file.Path

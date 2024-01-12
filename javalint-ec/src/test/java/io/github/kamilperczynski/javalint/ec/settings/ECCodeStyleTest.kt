@@ -11,11 +11,11 @@ import io.github.kamilperczynski.javalint.ec.ECCodeStyle
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter
 import io.github.kamilperczynski.javalint.ec.ECFile
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
+import io.github.kamilperczynski.javalint.formatter.NoopFormattingEvents
 import io.github.kamilperczynski.javalint.formatter.lang.JavaFormatterLanguage
 import io.github.kamilperczynski.javalint.formatter.lang.JsonFormatterLanguage
 import io.github.kamilperczynski.javalint.formatter.lang.XmlFormatterLanguage
 import io.github.kamilperczynski.javalint.formatter.lang.YamlFormatterLanguage
-import io.github.kamilperczynski.javalint.formatter.output.FixFormattingCommandEvents
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.formatter.YAMLCodeStyleSettings
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -37,7 +37,7 @@ class ECCodeStyleTest {
       intellijFormatter = IntellijFormatter(
         IntellijFormatterOptions(
           baseDir,
-          FixFormattingCommandEvents(baseDir)
+          NoopFormattingEvents.INSTANCE
         )
       )
     }

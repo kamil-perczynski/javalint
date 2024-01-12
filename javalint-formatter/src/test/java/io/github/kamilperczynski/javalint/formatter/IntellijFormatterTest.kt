@@ -1,8 +1,6 @@
 package io.github.kamilperczynski.javalint.formatter
 
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings.IndentOptions
-import io.github.kamilperczynski.javalint.formatter.IntellijFormatter
-import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -24,7 +22,7 @@ class IntellijFormatterTest {
       baseDir = Files.createTempDirectory("IntellijFormatterTest");
 
       formatter = IntellijFormatter(
-        IntellijFormatterOptions(baseDir, TestFormatterEvents.INSTANCE)
+        IntellijFormatterOptions(baseDir, NoopFormattingEvents.INSTANCE)
       )
     }
   }

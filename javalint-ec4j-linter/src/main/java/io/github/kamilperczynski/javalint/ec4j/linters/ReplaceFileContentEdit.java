@@ -5,15 +5,7 @@ import org.ec4j.lint.api.Resource;
 
 import java.nio.file.Path;
 
-public class ReplaceFileContentEdit implements Edit {
-
-  private final Path file;
-  private final String nextContent;
-
-  public ReplaceFileContentEdit(Path file, String nextContent) {
-    this.file = file;
-    this.nextContent = nextContent;
-  }
+public record ReplaceFileContentEdit(Path file, String nextContent) implements Edit {
 
   @Override
   public void perform(Resource resource, int offset) {

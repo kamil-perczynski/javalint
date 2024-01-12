@@ -1,4 +1,4 @@
-package io.github.kamilperczynski.javalint.formatter.output
+package io.github.kamilperczynski.javalint.cli.commands
 
 enum class ConsoleColor(private val code: String) {
 

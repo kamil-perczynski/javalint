@@ -1,9 +1,9 @@
 package io.github.kamilperczynski.javalint.formatter
 
-import io.github.kamilperczynski.javalint.formatter.FormatterEvents
 import java.nio.file.Path
 
-enum class TestFormatterEvents : FormatterEvents {
+enum class NoopFormattingEvents : FormatterEvents {
+
   INSTANCE;
 
   override fun formattingStarted() {
@@ -22,3 +22,4 @@ enum class TestFormatterEvents : FormatterEvents {
   }
 
 }
+
