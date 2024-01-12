@@ -23,7 +23,7 @@
 
     <dependency>
       <groupId>io.github.kamilperczynski.javalint</groupId>
-      <artifactId>javalint-ec</artifactId>
+      <artifactId>javalint-formatter</artifactId>
       <version>${project.version}</version>
     </dependency>
 

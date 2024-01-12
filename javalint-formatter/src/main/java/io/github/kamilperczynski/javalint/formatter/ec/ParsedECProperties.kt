@@ -1,4 +1,4 @@
-package io.github.kamilperczynski.javalint.ec
+package io.github.kamilperczynski.javalint.formatter.ec
 
 import org.ec4j.core.ResourceProperties
 import org.ec4j.core.model.Property

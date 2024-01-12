@@ -1,7 +1,7 @@
 package io.github.kamilperczynski.javalint.ec4j.linters;
 
-import io.github.kamilperczynski.javalint.ec.ECCodeStyle;
-import io.github.kamilperczynski.javalint.ec.ParsedECProperties;
+import io.github.kamilperczynski.javalint.formatter.ec.ECCodeStyle;
+import io.github.kamilperczynski.javalint.formatter.ec.ParsedECProperties;
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter;
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions;
 import io.github.kamilperczynski.javalint.formatter.NoopFormattingEvents;

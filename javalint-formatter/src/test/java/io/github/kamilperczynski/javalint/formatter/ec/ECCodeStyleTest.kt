@@ -1,15 +1,15 @@
-package io.github.kamilperczynski.javalint.ec.settings
+package io.github.kamilperczynski.javalint.formatter.ec
 
 import com.intellij.lang.Language
+import com.intellij.lang.java.JavaLanguage
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings.*
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings.WRAP_ALWAYS
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings.WRAP_ON_EVERY_ITEM
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings
 import com.intellij.psi.formatter.xml.XmlCodeStyleSettings
-import io.github.kamilperczynski.javalint.ec.ECCodeStyle
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter
-import io.github.kamilperczynski.javalint.ec.ECFile
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
 import io.github.kamilperczynski.javalint.formatter.NoopFormattingEvents
 import io.github.kamilperczynski.javalint.formatter.lang.JavaFormatterLanguage
@@ -47,7 +47,7 @@ class ECCodeStyleTest {
   @Test
   fun testParseECFileSettings() {
     // given:
-    val ecProperties = ECFile(baseDir.resolve("src/test/resources"))
+    val ecProperties = ECFile(baseDir.resolve("src/test/resources/ec"), "editorconfig.sample")
     val ecCodeStyle = ECCodeStyle(ecProperties)
 
     val file = Paths.get("ECCodeStyle.java")
@@ -61,8 +61,12 @@ class ECCodeStyleTest {
     // then:
     assertEquals(StandardCharsets.ISO_8859_1, charset)
 
-    assertEquals(4, configuredSettings.indentOptions.INDENT_SIZE)
-    assertEquals(4, configuredSettings.indentOptions.CONTINUATION_INDENT_SIZE)
+    assertEquals(2, configuredSettings.indentOptions.INDENT_SIZE)
+    assertEquals(2, configuredSettings.indentOptions.CONTINUATION_INDENT_SIZE)
+
+    val javaCommonSettings = configuredSettings.getCommonSettings(JavaLanguage.INSTANCE)
+    assertEquals(2, javaCommonSettings.indentOptions!!.INDENT_SIZE)
+    assertEquals(2, javaCommonSettings.indentOptions!!.CONTINUATION_INDENT_SIZE)
 
     val commonSettings = configuredSettings.getCommonSettings(null as Language?)
 
@@ -80,7 +84,7 @@ class ECCodeStyleTest {
   @Test
   fun testReadCustomJavaSettings() {
     // given:
-    val ecProperties = ECFile(baseDir.resolve("src/test/resources"))
+    val ecProperties = ECFile(baseDir.resolve("src/test/resources/ec"), "editorconfig.sample")
     val ecCodeStyle = ECCodeStyle(ecProperties)
 
     val file = Paths.get("ECCodeStyle.java")
@@ -93,13 +97,16 @@ class ECCodeStyleTest {
     val javaSettings = configuredSettings.getCustomSettings(JavaCodeStyleSettings::class.java)
 
     assertEquals(true, javaSettings.ALIGN_MULTILINE_RECORDS)
-    assertEquals(WRAP_ALWAYS, javaSettings.RECORD_COMPONENTS_WRAP)
+    assertEquals(
+      WRAP_ALWAYS,
+      javaSettings.RECORD_COMPONENTS_WRAP
+    )
   }
 
   @Test
   fun testReadYamlSettings() {
     // given:
-    val ecProperties = ECFile(baseDir.resolve("src/test/resources"))
+    val ecProperties = ECFile(baseDir.resolve("src/test/resources/ec"), "editorconfig.sample")
     val ecCodeStyle = ECCodeStyle(ecProperties)
 
     val file = Paths.get("application.yaml")
@@ -112,14 +119,14 @@ class ECCodeStyleTest {
     val yamlCommonSettings = configuredSettings.getCommonSettings(YAMLLanguage.INSTANCE)
     val yamlCustomSettings = configuredSettings.getCustomSettings(YAMLCodeStyleSettings::class.java)
 
-    assertEquals(2, yamlCommonSettings.indentOptions!!.INDENT_SIZE)
+    assertEquals(3, yamlCommonSettings.indentOptions!!.INDENT_SIZE)
     assertEquals(false, yamlCustomSettings.INDENT_SEQUENCE_VALUE)
   }
 
   @Test
   fun testReadXmlSettings() {
     // given:
-    val ecProperties = ECFile(baseDir.resolve("src/test/resources"))
+    val ecProperties = ECFile(baseDir.resolve("src/test/resources/ec"), "editorconfig.sample")
     val ecCodeStyle = ECCodeStyle(ecProperties)
 
     val file = Paths.get("pom.xml")
@@ -147,4 +154,3 @@ private fun createCodeSettings(): CodeStyleSettings {
   YamlFormatterLanguage().configureCodeStyleSettings(codeStyleSettings)
   return codeStyleSettings
 }
-

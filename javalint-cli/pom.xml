@@ -20,12 +20,6 @@
     </dependency>
 
     <dependency>
-      <groupId>io.github.kamilperczynski.javalint</groupId>
-      <artifactId>javalint-ec</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>info.picocli</groupId>
       <artifactId>picocli</artifactId>
       <version>4.7.0</version>

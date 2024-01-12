@@ -13,6 +13,7 @@ import com.intellij.mock.MockProject
 import com.intellij.openapi.extensions.ExtensionsArea
 import com.intellij.psi.codeStyle.CodeStyleSettings
 
+@Suppress("UnstableApiUsage")
 class JsonFormatterLanguage : FormatterLanguage {
 
   override fun registerLanguageComponents() {
@@ -28,7 +29,7 @@ class JsonFormatterLanguage : FormatterLanguage {
   }
 
   override fun configureCodeStyleSettings(codeStyleSettings: CodeStyleSettings) {
-    codeStyleSettings.registerCustomSettings(JsonLanguageCodeStyleSettingsProvider())
+    codeStyleSettings.registerCommonSettings(JsonLanguageCodeStyleSettingsProvider())
     codeStyleSettings.registerCustomSettings(JsonCodeStyleSettingsProvider())
   }
 

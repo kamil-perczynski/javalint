@@ -15,10 +15,12 @@ import com.intellij.openapi.extensions.ExtensionsArea
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import org.jetbrains.yaml.YAMLElementGenerator
 
+@Suppress("UnstableApiUsage")
 class XmlFormatterLanguage : FormatterLanguage {
 
   override fun configureCodeStyleSettings(codeStyleSettings: CodeStyleSettings) {
     codeStyleSettings.registerCustomSettings(XmlLanguageCodeStyleSettingsProvider())
+    codeStyleSettings.registerCommonSettings(XmlLanguageCodeStyleSettingsProvider())
   }
 
   override fun registerProjectComponents(project: MockProject) {

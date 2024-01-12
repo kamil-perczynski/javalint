@@ -1,4 +1,4 @@
-package io.github.kamilperczynski.javalint.ec
+package io.github.kamilperczynski.javalint.formatter.ec
 
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 
