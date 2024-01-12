@@ -6,6 +6,7 @@ import com.javalint.ec.settings.ECProperty
 import com.javalint.ec.settings.toWrapPropertyValue
 import com.javalint.ec.settings.toForceBracePropertyValue
 import com.javalint.ec.settings.toBraceStylePropertyValue
+import com.javalint.logging.Slf4j
 import {{className}}
 
 @Suppress("DEPRECATION")
@@ -13,36 +14,45 @@ import {{className}}
 @Generated("JavaLint CodeGen")
 class {{outputClassName}} {
 
-  fun setProperty(settings: {{simpleName}}, property: ECProperty): Boolean? {
-    return when (property.name) {
+  companion object : Slf4j()
+
+  fun setProperty(settings: {{simpleName}}, ecProperty: ECProperty): Any? {
+    val assignedValue = when (ecProperty.name) {
       {{~#each fields}}
       "{{externalName}}" ->
         {{~#if isInteger}}{
           {{#if isWrapConstant~}}
-           settings.{{name}} = toWrapPropertyValue(property)
+           val value = toWrapPropertyValue(ecProperty)
           {{~else if isBraceStyleConstant~}}
-           settings.{{name}} = toBraceStylePropertyValue(property)
+           val value = toBraceStylePropertyValue(ecProperty)
           {{~else if toForceBracePropertyValue~}}
-           settings.{{name}} = toForceBracePropertyValue(property)
+           val value = toForceBracePropertyValue(ecProperty)
           {{~else~}}
-           settings.{{name}} = property.rawValue.toInt()
+           val value = ecProperty.rawValue.toInt()
           {{~/if}}
-          true
+          settings.{{name}} = value
+          value
         }
         {{~else if isString}}{
-          settings.{{name}} = property.rawValue
-          true
+          settings.{{name}} = ecProperty.rawValue
+          ecProperty.rawValue
         }
         {{~else if isBoolean}}{
-          settings.{{name}} = property.rawValue.toBoolean()
-          true
+          settings.{{name}} = ecProperty.rawValue.toBoolean()
+          ecProperty.rawValue.toBoolean()
         }
         {{else~}}
-        TODO("Unsupported property") // settings.{{name}} = property.rawValue
+        TODO("Unsupported property") // settings.{{name}} = ecProperty.rawValue
         {{~/if~}}
       {{~/each}}
       else -> null
     }
+
+    if (assignedValue != null) {
+      log.debug("Setting code-style property: {} = {}", ecProperty.name, assignedValue)
+    }
+
+    return assignedValue
   }
 
 }
