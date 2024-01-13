@@ -34,6 +34,7 @@
       <groupId>org.ec4j.core</groupId>
       <artifactId>ec4j-core</artifactId>
     </dependency>
+
   </dependencies>
 
   <build>
