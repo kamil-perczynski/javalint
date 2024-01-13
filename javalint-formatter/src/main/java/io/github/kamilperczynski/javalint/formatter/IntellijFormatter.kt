@@ -22,7 +22,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.openapi.vfs.local.CoreLocalVirtualFile
-import com.intellij.openapi.vfs.local.WriteableCoreLocalVirtualFile
 import com.intellij.pom.PomModel
 import com.intellij.pom.core.impl.LangPomModel
 import com.intellij.pom.tree.TreeAspect
@@ -41,6 +40,7 @@ import com.intellij.psi.impl.source.tree.injected.InjectedLanguageManagerImpl
 import com.intellij.psi.util.ReadActionCache
 import com.intellij.psi.util.ReadActionCacheImpl
 import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
+import io.github.kamilperczynski.javalint.formatter.internal.WriteableCoreLocalVirtualFile
 import io.github.kamilperczynski.javalint.formatter.internal.registerNecessaryExtensions
 import io.github.kamilperczynski.javalint.formatter.internal.registerNecessaryProjectExtensions
 import io.github.kamilperczynski.javalint.formatter.lang.*

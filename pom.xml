@@ -128,15 +128,12 @@
                   <filter>
                     <artifact>*:*</artifact>
                     <excludes>
-                      <exclude>META-INF/LICENSE</exclude>
-                      <exclude>META-INF/NOTICE</exclude>
-                      <exclude>META-INF/*.txt</exclude>
-                      <exclude>META-INF/AL2.0</exclude>
-                      <exclude>META-INF/LGPL2.1</exclude>
                       <exclude>META-INF/DEPENDENCIES</exclude>
+                      <exclude>META-INF/CHANGES</exclude>
                       <exclude>META-INF/*.xml</exclude>
                       <exclude>**/*.dll</exclude>
                       <exclude>**/*.svg</exclude>
+                      <exclude>**/*.exe</exclude>
                       <exclude>**/*.aut</exclude>
                     </excludes>
                   </filter>

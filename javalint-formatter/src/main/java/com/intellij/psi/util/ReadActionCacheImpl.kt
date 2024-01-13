@@ -3,6 +3,10 @@ package com.intellij.psi.util
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.util.ProcessingContext
 
+/**
+ * This file has been modified from its original version.
+ * Modifications made by Kamil Perczyński on 2024-01-14
+ */
 class ReadActionCacheImpl : ReadActionCache {
 
   private val threadProcessingContext: ThreadLocal<ProcessingContext> = ThreadLocal()
@@ -20,7 +24,6 @@ class ReadActionCacheImpl : ReadActionCache {
     threadProcessingContext.remove()
   }
 
-
   private var writeActionProcessingContext: ProcessingContext? = null
 
   override fun <T> allowInWriteAction(supplier: () -> T): T {
@@ -37,5 +40,6 @@ class ReadActionCacheImpl : ReadActionCache {
   override fun allowInWriteAction(runnable: Runnable) {
     allowInWriteAction(runnable::run)
   }
+
 }
 

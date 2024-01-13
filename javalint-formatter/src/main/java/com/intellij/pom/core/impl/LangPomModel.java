@@ -7,7 +7,12 @@ import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.impl.source.PostprocessReformattingAspectImpl;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This file has been modified from its original version.
+ * Modifications made by Kamil Perczyński on 2024-01-14
+ */
 public class LangPomModel extends PomModelImpl {
+
   private final PostprocessReformattingAspect myAspect;
 
   public LangPomModel(@NotNull Project project) {
@@ -28,4 +33,5 @@ public class LangPomModel extends PomModelImpl {
     super.updateDependentAspects(event);
     myAspect.update(event);
   }
+
 }
