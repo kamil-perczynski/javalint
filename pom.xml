@@ -134,9 +134,9 @@
                       <exclude>META-INF/AL2.0</exclude>
                       <exclude>META-INF/LGPL2.1</exclude>
                       <exclude>META-INF/DEPENDENCIES</exclude>
-                      <exclude>META-INF/maven/**</exclude>
                       <exclude>META-INF/*.xml</exclude>
                       <exclude>**/*.dll</exclude>
+                      <exclude>**/*.svg</exclude>
                       <exclude>**/*.aut</exclude>
                     </excludes>
                   </filter>

@@ -3,8 +3,11 @@ package io.github.kamilperczynski.javalint.cli
 
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import io.github.kamilperczynski.javalint.cli.commands.CheckFormattingCommand
+import io.github.kamilperczynski.javalint.cli.commands.CheckFormattingCommandEvents
 import io.github.kamilperczynski.javalint.cli.commands.FixFormattingCommand
+import io.github.kamilperczynski.javalint.cli.commands.FixFormattingCommandEvents
 import io.github.kamilperczynski.javalint.cli.crawler.*
+import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
 import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import io.github.kamilperczynski.javalint.formatter.ec.ECCodeStyle
 import io.github.kamilperczynski.javalint.formatter.ec.ECFile
@@ -13,14 +16,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.Callable
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
 import java.util.stream.Collectors.toList
-
-val patternTypesPriority: List<JavaLintPathPattern.Type> = listOf(
-  JavaLintPathPattern.Type.IGNORES,
-  JavaLintPathPattern.Type.INCLUDES
-)
 
 /**
  * By default, hidden files and directories are ignored (being compliant to ktlint).
@@ -50,20 +46,17 @@ Examples:
 
   # Check only certain locations starting from the current directory.
   #
-  # Prepend ! to negate the pattern, KtLint uses .gitignore pattern style syntax.
+  # Prepend ! to negate the pattern, JavaLint uses .gitignore pattern style syntax.
   # Globs are applied starting from the last one.
   #
   # Hidden folders will be skipped.
-  # Check all '.kt' files in 'src/' directory, but ignore files ending with 'Test.kt':
-  javalint "src/**/*.kt" "!src/**/*Test.kt"
-  # Check all '.kt' files in 'src/' directory, but ignore 'generated' directory and its subdirectories:
-  javalint "src/**/*.kt" "!src/**/generated/**"
+  # Check all '.java' files in 'src/' directory, but ignore files ending with 'Test.java':
+  javalint "src/**/*.java" "!src/**/*Test.java"
+  # Check all '.java' files in 'src/' directory, but ignore 'generated' directory and its subdirectories:
+  javalint "src/**/*.java" "!src/**/generated/**"
 
   # Auto-correct style violations.
-  javalint -F "src/**/*.kt"
-
-  # Using custom reporter jar and overriding report location
-  javalint --reporter=csv,artifact=/path/to/reporter/csv.jar,output=my-custom-report.csv
+  javalint -F "src/**/*.java"
 Flags:
 """,
   synopsisHeading = "",
@@ -86,7 +79,7 @@ class JavaLintCommand : Callable<Int> {
     names = ["--current-working-dir", "--cwd"],
     description = ["Current working directory"],
   )
-  var cwd: String = "."
+  var workingDir: String = "."
 
   @Option(
     names = ["--format", "-F"],
@@ -105,36 +98,16 @@ class JavaLintCommand : Callable<Int> {
     names = ["--relative"],
     description = [
       "Print files relative to the working directory " +
-        "(e.g. dir/file.kt instead of /home/user/project/dir/file.kt)",
+        "(e.g. dir/file.java instead of /home/user/project/dir/file.java)",
     ],
   )
-  var relative: Boolean = false
-
-  @Option(
-    names = ["--stdin"],
-    description = ["Read file from stdin"],
-  )
-  private var stdin: Boolean = false
-
-  @Option(
-    names = ["--patterns-from-stdin"],
-    description = [
-      "Read additional patterns to check/format from stdin. " +
-        "Patterns are delimited by the given argument. (default is newline) " +
-        "If the argument is an empty string, the NUL byte is used.",
-    ],
-    arity = "0..1",
-    fallbackValue = "\n",
-  )
-  private var stdinDelimiter: String? = null
+  var relative: Boolean = true
 
   @Option(
     names = ["--editorconfig"],
     description = [
       "Path to the default '.editorconfig'. A property value from this file is used only when no " +
-        "'.editorconfig' file on the path to the source file specifies that property. Note: up until ktlint " +
-        "0.46 the property value in this file used to override values found in '.editorconfig' files on the " +
-        "path to the source file.",
+        "'.editorconfig' file on the path to the source file specifies that property.",
     ],
   )
   private var editorConfigPath: String? = null
@@ -148,13 +121,9 @@ class JavaLintCommand : Callable<Int> {
   @Parameters(hidden = true)
   private var patterns = emptyList<String>()
 
-  private val tripped = AtomicBoolean()
-  private val fileNumber = AtomicInteger()
-  private val errorNumber = AtomicInteger()
-  private val adviseToUseFormat = AtomicBoolean()
-
   override fun call(): Int {
-    val projectRoot = Paths.get(cwd).toAbsolutePath().normalize()
+
+    val projectRoot = Paths.get(workingDir).toAbsolutePath().normalize()
 
     val pathsFilter: PathsFilter =
       toPathsFilter(projectRoot, patterns)
@@ -165,10 +134,16 @@ class JavaLintCommand : Callable<Int> {
     else
       DefaultIjCodeStyle.INSTANCE
 
-    return if (format)
-      FixFormattingCommand(projectRoot, paths, javaLintCodeStyle).call()
-    else
-      CheckFormattingCommand(projectRoot, paths, javaLintCodeStyle).call()
+    if (format) {
+      val formatterEvents = FixFormattingCommandEvents(projectRoot)
+      val options = IntellijFormatterOptions(projectRoot, formatterEvents)
+
+      return FixFormattingCommand(paths, javaLintCodeStyle, options).call()
+    }
+
+    val formatterEvents = CheckFormattingCommandEvents(projectRoot)
+    val options = IntellijFormatterOptions(projectRoot, formatterEvents)
+    return CheckFormattingCommand(paths, javaLintCodeStyle, options).call()
   }
 
 }
@@ -181,8 +156,8 @@ private fun toPathsFilter(projectRoot: Path, cliPatterns: List<String>): PathsFi
   val javaLintPatterns = JavaLintPathPatterns(
     cliPatterns.stream()
       .map(::parseCliJavaLintPathPattern)
-      .sorted(Comparator.comparing { patternTypesPriority.indexOf(it.type) })
       .collect(toList())
+      .reversed()
   )
   return JavaLintPatternPathFilter(projectRoot, javaLintPatterns)
 }

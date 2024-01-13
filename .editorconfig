@@ -26,6 +26,3 @@ ij_any_prefer_parameters_wrap = true
 
 ij_any_ternary_operation_signs_on_next_line = true
 ij_any_ternary_operation_wrap = on_every_item
-
-[*.yaml]
-ij_yaml_spaces_within_brackets = false

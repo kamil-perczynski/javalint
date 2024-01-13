@@ -1,16 +1,11 @@
 package io.github.kamilperczynski.javalint.formatter.ec
 
-import com.intellij.json.JsonLanguage
-import com.intellij.lang.java.JavaLanguage
-import com.intellij.lang.xml.XMLLanguage
 import com.intellij.psi.codeStyle.CodeStyleDefaults
 import com.intellij.psi.codeStyle.CodeStyleSettings
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings.IndentOptions
 import com.intellij.util.LineSeparator
 import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import io.github.kamilperczynski.javalint.formatter.logging.Slf4j
-import org.jetbrains.yaml.YAMLLanguage
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
@@ -94,17 +89,6 @@ class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
     }
 
     return settings
-  }
-
-  private fun executeForAllCommonSettings(
-    rootSettings: CodeStyleSettings,
-    fn: (commonSettings: CommonCodeStyleSettings) -> Unit
-  ) {
-    fn.invoke(rootSettings)
-    fn.invoke(rootSettings.getCommonSettings(JavaLanguage.INSTANCE))
-    fn.invoke(rootSettings.getCommonSettings(XMLLanguage.INSTANCE))
-    fn.invoke(rootSettings.getCommonSettings(JsonLanguage.INSTANCE))
-    fn.invoke(rootSettings.getCommonSettings(YAMLLanguage.INSTANCE))
   }
 
 }

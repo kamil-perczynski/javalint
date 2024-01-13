@@ -1,6 +1,5 @@
 package io.github.kamilperczynski.javalint.formatter.ec
 
-import com.intellij.lang.Language
 import com.intellij.lang.java.JavaLanguage
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.psi.codeStyle.CodeStyleSettings
@@ -68,17 +67,15 @@ class ECCodeStyleTest {
     assertEquals(2, javaCommonSettings.indentOptions!!.INDENT_SIZE)
     assertEquals(2, javaCommonSettings.indentOptions!!.CONTINUATION_INDENT_SIZE)
 
-    val commonSettings = configuredSettings.getCommonSettings(null as Language?)
+    assertEquals(WRAP_ON_EVERY_ITEM, javaCommonSettings.METHOD_CALL_CHAIN_WRAP)
+    assertEquals(true, javaCommonSettings.WRAP_FIRST_METHOD_IN_CALL_CHAIN)
+    assertEquals(WRAP_ALWAYS, javaCommonSettings.CALL_PARAMETERS_WRAP)
 
-    assertEquals(WRAP_ON_EVERY_ITEM, commonSettings.METHOD_CALL_CHAIN_WRAP)
-    assertEquals(true, commonSettings.WRAP_FIRST_METHOD_IN_CALL_CHAIN)
-    assertEquals(WRAP_ALWAYS, commonSettings.CALL_PARAMETERS_WRAP)
+    assertEquals(WRAP_ON_EVERY_ITEM, javaCommonSettings.METHOD_PARAMETERS_WRAP)
+    assertEquals(true, javaCommonSettings.PREFER_PARAMETERS_WRAP)
 
-    assertEquals(WRAP_ON_EVERY_ITEM, commonSettings.METHOD_PARAMETERS_WRAP)
-    assertEquals(true, commonSettings.PREFER_PARAMETERS_WRAP)
-
-    assertEquals(WRAP_ON_EVERY_ITEM, commonSettings.TERNARY_OPERATION_WRAP)
-    assertEquals(true, commonSettings.TERNARY_OPERATION_SIGNS_ON_NEXT_LINE)
+    assertEquals(WRAP_ON_EVERY_ITEM, javaCommonSettings.TERNARY_OPERATION_WRAP)
+    assertEquals(true, javaCommonSettings.TERNARY_OPERATION_SIGNS_ON_NEXT_LINE)
   }
 
   @Test

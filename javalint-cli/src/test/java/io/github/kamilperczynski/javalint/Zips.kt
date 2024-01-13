@@ -8,7 +8,7 @@ import java.util.zip.ZipInputStream
 fun extractZipArchive(resourcePath: String, targetDir: Path): Int {
   var filesCount = 0
 
-  ZipInputStream(MainKtTest::class.java.classLoader.getResourceAsStream(resourcePath)!!).use {
+  ZipInputStream(SpringBootMainKtTest::class.java.classLoader.getResourceAsStream(resourcePath)!!).use {
     var zipEntry = it.nextEntry
     val buffer = ByteArray(1024)
 

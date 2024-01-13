@@ -6,6 +6,8 @@ enum class NoopFormattingEvents : FormatterEvents {
 
   INSTANCE;
 
+  override val reformattedFilesCount: Int get() = 0
+
   override fun formattingStarted() {
   }
 

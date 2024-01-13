@@ -7,8 +7,7 @@ class CheckFormattingCommandEvents(private val homePath: Path) : FormatterEvents
 
   private var formattingStartedAt: Long = 0
 
-  var reformattedFilesCount = 0
-    private set
+  override var reformattedFilesCount = 0
 
   override fun formattingStarted() {
     print(ConsoleColor.WHITE_BOLD_BRIGHT)
