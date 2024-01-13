@@ -125,8 +125,7 @@ class JavaLintCommand : Callable<Int> {
 
     val projectRoot = Paths.get(workingDir).toAbsolutePath().normalize()
 
-    val pathsFilter: PathsFilter =
-      toPathsFilter(projectRoot, patterns)
+    val pathsFilter: PathsFilter = toPathsFilter(projectRoot, patterns)
     val paths = discoverProjectFiles(projectRoot, pathsFilter)
 
     val javaLintCodeStyle = if (Files.exists(projectRoot.resolve(".editorconfig")))
