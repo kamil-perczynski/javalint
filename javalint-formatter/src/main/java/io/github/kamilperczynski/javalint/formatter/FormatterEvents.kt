@@ -4,6 +4,8 @@ import java.nio.file.Path
 
 interface FormatterEvents {
 
+  val reformattedFilesCount: Int
+
   fun formattingStarted()
   fun fileFormattingStarted(path: Path)
   fun fileIgnored(path: Path)

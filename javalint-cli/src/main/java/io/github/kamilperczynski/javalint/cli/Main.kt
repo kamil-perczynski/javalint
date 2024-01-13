@@ -14,12 +14,11 @@ fun executeCli(vararg args: String): Int {
 
   val parsedArgs = commandLine.parseArgs(*args)
 
-
   if (commandLine.isUsageHelpRequested) {
-    commandLine.usage(System.out, CommandLine.Help.Ansi.OFF)
+    commandLine.usage(System.out, CommandLine.Help.Ansi.ON)
     return 0
   } else if (commandLine.isVersionHelpRequested) {
-    commandLine.printVersionHelp(System.out, CommandLine.Help.Ansi.OFF)
+    commandLine.printVersionHelp(System.out, CommandLine.Help.Ansi.ON)
     return 0
   }
 

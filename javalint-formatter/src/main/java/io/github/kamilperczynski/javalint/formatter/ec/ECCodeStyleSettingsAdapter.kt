@@ -2,7 +2,6 @@ package io.github.kamilperczynski.javalint.formatter.ec
 
 import com.intellij.json.JsonLanguage
 import com.intellij.json.formatter.JsonCodeStyleSettings
-import com.intellij.lang.Language
 import com.intellij.lang.java.JavaLanguage
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.psi.codeStyle.CodeStyleSettings
@@ -33,15 +32,27 @@ class ECCodeStyleSettingsAdapter(private val codeStyleSettings: CodeStyleSetting
       return
     }
 
-    val parts = ecProperty.name.split("_").toTypedArray()
+    val parts = ecProperty.name
+      .split("_")
+      .toTypedArray()
 
-    val ijProperty = Arrays.stream(parts)
+    val ijProperty = Arrays
+      .stream(parts)
       .skip(2)
       .collect(Collectors.joining("_"))
 
-    val commonSettings = toCommonCodeStyleSettings(parts[1], codeStyleSettings)
-
+    val ijPropertyLang = parts[1]
     val parsedProperty = ECProperty(ijProperty, ecProperty.rawValue)
+
+    if (ijPropertyLang == "any") {
+      executeForAllCommonSettings(codeStyleSettings) {
+        commonECCodeStyleAdapter.setProperty(it, parsedProperty)
+          ?: log.warn("Unsupported property: {}", ecProperty.name)
+      }
+      return
+    }
+
+    val commonSettings = toCommonCodeStyleSettings(ijPropertyLang, codeStyleSettings)
 
     commonECCodeStyleAdapter.setProperty(commonSettings, parsedProperty)
       ?: indentOptionsECCodeStyleAdapter.setProperty(commonSettings.indentOptions!!, parsedProperty)
@@ -71,12 +82,11 @@ private fun toCommonCodeStyleSettings(
   codeStyleSettings: CodeStyleSettings
 ): CommonCodeStyleSettings {
   return when (ijPropertyLanguage) {
-    "any" -> codeStyleSettings.getCommonSettings(null as Language?)
     "java" -> codeStyleSettings.getCommonSettings(JavaLanguage.INSTANCE)
     "json" -> codeStyleSettings.getCommonSettings(JsonLanguage.INSTANCE)
     "yaml" -> codeStyleSettings.getCommonSettings(YAMLLanguage.INSTANCE)
     "xml" -> codeStyleSettings.getCommonSettings(XMLLanguage.INSTANCE)
-    else -> throw IllegalArgumentException("Should not ever happen!")
+    else -> throw IllegalArgumentException("Unsupported ij property language: $ijPropertyLanguage")
   }
 }
 
@@ -86,4 +96,15 @@ private fun isIjProperty(property: ECProperty): Boolean {
     || property.name.startsWith("ij_xml")
     || property.name.startsWith("ij_json")
     || property.name.startsWith("ij_yaml"))
+}
+
+fun executeForAllCommonSettings(
+  rootSettings: CodeStyleSettings,
+  fn: (commonSettings: CommonCodeStyleSettings) -> Unit
+) {
+  fn.invoke(rootSettings)
+  fn.invoke(rootSettings.getCommonSettings(JavaLanguage.INSTANCE))
+  fn.invoke(rootSettings.getCommonSettings(XMLLanguage.INSTANCE))
+  fn.invoke(rootSettings.getCommonSettings(JsonLanguage.INSTANCE))
+  fn.invoke(rootSettings.getCommonSettings(YAMLLanguage.INSTANCE))
 }

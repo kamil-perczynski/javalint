@@ -7,7 +7,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettings
 
 interface FormatterLanguage {
 
-  fun registerLanguageComponents() {}
+  fun registerLanguageComponents()
   fun registerFileType(fileTypeRegistry: CoreFileTypeRegistry)
   fun configureCodeStyleSettings(codeStyleSettings: CodeStyleSettings)
   fun registerProjectComponents(project: MockProject)

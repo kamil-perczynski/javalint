@@ -8,27 +8,23 @@ import java.util.concurrent.Callable
 import kotlin.math.min
 
 class CheckFormattingCommand(
-  private val projectRoot: Path,
   private val paths: List<Path>,
-  private val codeStyle: JavaLintCodeStyle
+  private val codeStyle: JavaLintCodeStyle,
+  private val options: IntellijFormatterOptions
 ) : Callable<Int> {
 
   override fun call(): Int {
-    val formatterEvents = CheckFormattingCommandEvents(projectRoot)
+    val formatter = IntellijFormatter(options)
 
-    val formatter = IntellijFormatter(
-      IntellijFormatterOptions(projectRoot, formatterEvents)
-    )
-
-    formatterEvents.formattingStarted()
+    options.formatterEvents.formattingStarted()
 
     for (path in paths) {
       formatter.formatFile(path, codeStyle) { _, _ -> }
     }
 
-    formatterEvents.formattingEnd()
+    options.formatterEvents.formattingEnd()
 
-    return min(formatterEvents.reformattedFilesCount, 1)
+    return min(options.formatterEvents.reformattedFilesCount, 1)
   }
 
 }

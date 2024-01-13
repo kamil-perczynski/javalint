@@ -8,14 +8,13 @@ class FixFormattingCommandEvents(private val homePath: Path) : FormatterEvents {
   private var formattingStartedAt: Long = 0
 
   private var filesWithCorrectStyleCount = 0
-  private var reformattedFilesCount = 0
+  override var reformattedFilesCount = 0
 
   override fun formattingStarted() {
     print(ConsoleColor.WHITE_BOLD_BRIGHT)
     print("Formatting all files at: $homePath")
     print(ConsoleColor.RESET)
     println()
-
   }
 
   override fun fileFormattingStarted(path: Path) {
@@ -39,7 +38,6 @@ class FixFormattingCommandEvents(private val homePath: Path) : FormatterEvents {
       print(path.toString().padEnd(110))
       print(" ${duration}ms".padStart(10))
       println()
-
     } else {
       filesWithCorrectStyleCount++
 

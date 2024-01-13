@@ -12,21 +12,17 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class FixFormattingCommand(
-  private val projectRoot: Path,
   private val paths: List<Path>,
-  private val codeStyle: JavaLintCodeStyle
+  private val codeStyle: JavaLintCodeStyle,
+  private val options: IntellijFormatterOptions
 ) : Callable<Int> {
 
+
   override fun call(): Int {
-    val formatterEvents = FixFormattingCommandEvents(projectRoot)
-
-    val formatter = IntellijFormatter(
-      IntellijFormatterOptions(projectRoot, formatterEvents)
-    )
-
+    val formatter = IntellijFormatter(options)
     val threadPool = Executors.newFixedThreadPool(2)
 
-    formatterEvents.formattingStarted()
+    options.formatterEvents.formattingStarted()
 
     for (path in paths) {
       formatter.formatFile(path, codeStyle) { _, el ->
@@ -35,12 +31,12 @@ class FixFormattingCommand(
         threadPool.submit {
           val byteBuffer = codeStyle.charset(path).encode(charBuffer)
 
-          Files.write(projectRoot.resolve(path), byteBuffer.toByteArray())
+          Files.write(options.homePath.resolve(path), byteBuffer.toByteArray())
         }
       }
     }
 
-    formatterEvents.formattingEnd()
+    options.formatterEvents.formattingEnd()
 
     threadPool.shutdown()
     threadPool.awaitTermination(5, TimeUnit.MINUTES)
