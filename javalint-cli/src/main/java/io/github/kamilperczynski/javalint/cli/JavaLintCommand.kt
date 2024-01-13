@@ -18,16 +18,6 @@ import java.nio.file.Paths
 import java.util.concurrent.Callable
 import java.util.stream.Collectors.toList
 
-/**
- * By default, hidden files and directories are ignored (being compliant to ktlint).
- *
- * Additionally, as reasonable defaults, typical folders with dependencies
- * or build outputs are excluded as well.
- */
-val defaultPathsFilter = ExcludeHiddenDirectoriesFilter(
-  listOf("target", "build", "dist", "node_modules")
-)
-
 @Command(
   headerHeading =
   """
@@ -148,17 +138,16 @@ class JavaLintCommand : Callable<Int> {
 }
 
 private fun toPathsFilter(projectRoot: Path, cliPatterns: List<String>): PathsFilter {
-  if (cliPatterns.isEmpty()) {
-    return defaultPathsFilter
-  }
-
   val javaLintPatterns = JavaLintPathPatterns(
     cliPatterns.stream()
       .map(::parseCliJavaLintPathPattern)
       .collect(toList())
       .reversed()
   )
-  return JavaLintPatternPathFilter(projectRoot, javaLintPatterns)
+  return JavaLintPatternPathFilter(
+    projectRoot,
+    javaLintPatterns
+  )
 }
 
 enum class DefaultIjCodeStyle : JavaLintCodeStyle {
