@@ -40,7 +40,10 @@ public class CodegenField {
   }
 
   public boolean isForceBraceConstant() {
-    return hasAnnotation("com.intellij.psi.codeStyle.CommonCodeStyleSettings$ForceBraceConstant");
+    return switch (field.getName()) {
+      case "IF_BRACE_FORCE", "DOWHILE_BRACE_FORCE", "WHILE_BRACE_FORCE", "FOR_BRACE_FORCE" -> true;
+      default -> false;
+    };
   }
 
   public boolean isBraceStyleConstant() {

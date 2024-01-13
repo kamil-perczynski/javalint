@@ -25,7 +25,7 @@ class {{outputClassName}} {
            val value = toWrapPropertyValue(ecProperty)
           {{~else if isBraceStyleConstant~}}
            val value = toBraceStylePropertyValue(ecProperty)
-          {{~else if toForceBracePropertyValue~}}
+          {{~else if isForceBraceConstant~}}
            val value = toForceBracePropertyValue(ecProperty)
           {{~else~}}
            val value = ecProperty.rawValue.toInt()
