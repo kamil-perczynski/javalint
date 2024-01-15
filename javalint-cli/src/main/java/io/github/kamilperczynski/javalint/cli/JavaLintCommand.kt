@@ -21,7 +21,7 @@ import java.util.stream.Collectors.toList
 @Command(
   headerHeading =
   """
-An anti-bikeshedding Java linter with built-in formatter.
+Java, XML, JSON and Yaml formatter.
 
 Usage:
   javalint <flags> [patterns]
@@ -60,12 +60,6 @@ class JavaLintCommand : Callable<Int> {
   private lateinit var commandSpec: Model.CommandSpec
 
   @Option(
-    names = ["--color"],
-    description = ["Make output colorful"],
-  )
-  var color: Boolean = false
-
-  @Option(
     names = ["--current-working-dir", "--cwd"],
     description = ["Current working directory"],
   )
@@ -85,13 +79,10 @@ class JavaLintCommand : Callable<Int> {
     get() = if (field < 0) Int.MAX_VALUE else field
 
   @Option(
-    names = ["--relative"],
-    description = [
-      "Print files relative to the working directory " +
-        "(e.g. dir/file.java instead of /home/user/project/dir/file.java)",
-    ],
+    names = ["--max-files"],
+    description = ["Maximum number of files crawled for formatting check"],
   )
-  var relative: Boolean = true
+  private var maxFiles: Int = 1000
 
   @Option(
     names = ["--editorconfig"],
@@ -116,7 +107,7 @@ class JavaLintCommand : Callable<Int> {
     val projectRoot = Paths.get(workingDir).toAbsolutePath().normalize()
 
     val pathsFilter: PathsFilter = toPathsFilter(projectRoot, patterns)
-    val paths = discoverProjectFiles(projectRoot, pathsFilter)
+    val paths = discoverProjectFiles(projectRoot, pathsFilter, maxFiles)
 
     val javaLintCodeStyle = if (Files.exists(projectRoot.resolve(".editorconfig")))
       ECCodeStyle(ECFile(projectRoot))

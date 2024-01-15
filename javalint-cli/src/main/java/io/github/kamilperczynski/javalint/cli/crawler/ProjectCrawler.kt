@@ -8,7 +8,11 @@ import java.nio.file.Path
 import java.nio.file.attribute.BasicFileAttributes
 import kotlin.io.path.relativeTo
 
-fun discoverProjectFiles(projectRoot: Path, pathsFilter: PathsFilter): List<Path> {
+fun discoverProjectFiles(
+  projectRoot: Path,
+  pathsFilter: PathsFilter,
+  maxFiles: Int = Int.MAX_VALUE
+): List<Path> {
   val paths = mutableListOf<Path>()
 
   val fileVisitor = object : FileVisitor<Path> {
@@ -24,6 +28,10 @@ fun discoverProjectFiles(projectRoot: Path, pathsFilter: PathsFilter): List<Path
       if (pathsFilter.matchFile(file)) {
         val relativeFile = file.relativeTo(projectRoot)
         paths.add(relativeFile)
+
+        if (paths.size > maxFiles) {
+          throw IllegalStateException("Files crawled limit reached ($maxFiles). Increase the limit with --max-files option")
+        }
       }
 
       return FileVisitResult.CONTINUE
