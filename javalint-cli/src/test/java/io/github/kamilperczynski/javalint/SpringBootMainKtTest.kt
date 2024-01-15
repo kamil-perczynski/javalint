@@ -36,7 +36,7 @@ class SpringBootMainKtTest {
   fun tearDown() {
     System.setOut(systemOut)
     log.info("Deleting {}", baseDir)
-    deleteExtractedDir(baseDir)
+//    deleteExtractedDir(baseDir)
 
     println(consoleOutput())
   }
@@ -59,6 +59,46 @@ class SpringBootMainKtTest {
     assertTrue(output.contains("Found 2 files with incorrect formatting"))
 
     assertEquals(1, exitCode)
+  }
+
+  @Test
+  fun testCheckFormattingWithCustomEditorconfig() {
+    // given:
+    Files.writeString(
+      baseDir.resolve("src/main/resources/application.yaml"),
+      """
+        server :
+          port : 8081
+
+      """.trimIndent()
+    )
+
+    val customEditorConfig = Files.createTempFile(this::class.java.simpleName, ".tmp")
+    Files.writeString(
+      customEditorConfig,
+      """
+        root = true
+        indent_size = 4
+
+        [*.yaml]
+        ij_yaml_indent_size = 2
+        ij_yaml_space_before_colon = true
+      """.trimIndent()
+    )
+
+    // when:
+    val args = arrayOf(
+      "!src/test/**",
+      "--editorconfig",
+      customEditorConfig.toRealPath().toString(),
+      "--cwd",
+      baseDir.toString()
+    )
+
+    val exitCode = executeCli(*args)
+
+    // then:
+    assertEquals(0, exitCode)
   }
 
   @Test

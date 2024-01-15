@@ -38,7 +38,7 @@ class JavaLintPatternPathFilter(
   override fun matchFile(path: Path): Boolean {
     val normalizedPath = path.relativeTo(projectRoot).normalize()
 
-    val pathPattern = patterns.matches(normalizedPath) ?: return true
+    val pathPattern = patterns.matches(normalizedPath) ?: return patterns.hasOnlyExcludingPatterns()
 
     return pathPattern.type == JavaLintPathPattern.Type.INCLUDES
   }

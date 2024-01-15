@@ -3,7 +3,10 @@ package io.github.kamilperczynski.javalint.cli.commands
 import io.github.kamilperczynski.javalint.formatter.FormatterEvents
 import java.nio.file.Path
 
-class CheckFormattingCommandEvents(private val homePath: Path) : FormatterEvents {
+class CheckFormattingCommandEvents(
+  private val homePath: Path,
+  private val maxErrors: Int
+) : FormatterEvents {
 
   private var formattingStartedAt: Long = 0
 
@@ -46,6 +49,10 @@ class CheckFormattingCommandEvents(private val homePath: Path) : FormatterEvents
       print(" (unchanged)")
       print(ConsoleColor.RESET)
       print('\r')
+    }
+
+    if (reformattedFilesCount > maxErrors) {
+      throw IllegalStateException("Formatting errors limit reached ($maxErrors). Increase the limit with --limit option")
     }
   }
 

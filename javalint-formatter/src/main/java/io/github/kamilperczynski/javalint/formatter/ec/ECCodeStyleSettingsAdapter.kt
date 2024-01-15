@@ -54,24 +54,26 @@ class ECCodeStyleSettingsAdapter(private val codeStyleSettings: CodeStyleSetting
 
     val commonSettings = toCommonCodeStyleSettings(ijPropertyLang, codeStyleSettings)
 
-    commonECCodeStyleAdapter.setProperty(commonSettings, parsedProperty)
-      ?: indentOptionsECCodeStyleAdapter.setProperty(commonSettings.indentOptions!!, parsedProperty)
-      ?: javaECCodeStyleAdapter.setProperty(
+    when (ijPropertyLang) {
+      "java" -> javaECCodeStyleAdapter.setProperty(
         codeStyleSettings.getCustomSettings(JavaCodeStyleSettings::class.java),
         parsedProperty
       )
-      ?: xmlECCodeStyleAdapter.setProperty(
+      "xml" -> xmlECCodeStyleAdapter.setProperty(
         codeStyleSettings.getCustomSettings(XmlCodeStyleSettings::class.java),
         parsedProperty
       )
-      ?: jsonECCodeStyleAdapter.setProperty(
+      "json" -> jsonECCodeStyleAdapter.setProperty(
         codeStyleSettings.getCustomSettings(JsonCodeStyleSettings::class.java),
         parsedProperty
       )
-      ?: yamlECCodeStyleAdapter.setProperty(
+      "yaml" -> yamlECCodeStyleAdapter.setProperty(
         codeStyleSettings.getCustomSettings(YAMLCodeStyleSettings::class.java),
         parsedProperty
       )
+      else -> null
+    }
+      ?: indentOptionsECCodeStyleAdapter.setProperty(commonSettings.indentOptions!!, parsedProperty)
       ?: log.warn("Unsupported property: {}", ecProperty.name)
   }
 
