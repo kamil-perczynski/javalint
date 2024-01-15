@@ -11,4 +11,9 @@ data class JavaLintPathPatterns(val patterns: List<JavaLintPathPattern>) {
       .orElse(null)
   }
 
+  fun hasOnlyExcludingPatterns(): Boolean {
+    return patterns.stream()
+      .noneMatch { it.type == JavaLintPathPattern.Type.INCLUDES }
+  }
+
 }

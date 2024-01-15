@@ -21,7 +21,7 @@ import java.util.stream.Collectors.toList
 @Command(
   headerHeading =
   """
-Java, XML, JSON and Yaml formatter.
+Java, XML, JSON and YAML formatter.
 
 Usage:
   javalint <flags> [patterns]
@@ -103,14 +103,15 @@ class JavaLintCommand : Callable<Int> {
   private var patterns = emptyList<String>()
 
   override fun call(): Int {
-
     val projectRoot = Paths.get(workingDir).toAbsolutePath().normalize()
 
     val pathsFilter: PathsFilter = toPathsFilter(projectRoot, patterns)
     val paths = discoverProjectFiles(projectRoot, pathsFilter, maxFiles)
 
-    val javaLintCodeStyle = if (Files.exists(projectRoot.resolve(".editorconfig")))
-      ECCodeStyle(ECFile(projectRoot))
+    val resolvedECFile = findECFile(projectRoot, editorConfigPath)
+
+    val javaLintCodeStyle = if (resolvedECFile != null)
+      ECCodeStyle(resolvedECFile)
     else
       DefaultIjCodeStyle.INSTANCE
 
@@ -121,11 +122,24 @@ class JavaLintCommand : Callable<Int> {
       return FixFormattingCommand(paths, javaLintCodeStyle, options).call()
     }
 
-    val formatterEvents = CheckFormattingCommandEvents(projectRoot)
+    val formatterEvents = CheckFormattingCommandEvents(projectRoot, limit)
     val options = IntellijFormatterOptions(projectRoot, formatterEvents)
     return CheckFormattingCommand(paths, javaLintCodeStyle, options).call()
   }
 
+}
+
+private fun findECFile(projectRoot: Path, editorConfigPath: String?): ECFile? {
+  if (Files.exists(projectRoot.resolve(".editorconfig"))) {
+    return ECFile(projectRoot)
+  }
+
+  if (editorConfigPath != null && Files.exists(Paths.get(editorConfigPath))) {
+    val customEditorConfigFile = Paths.get(editorConfigPath)
+    return ECFile(customEditorConfigFile.parent, customEditorConfigFile.fileName.toString())
+  }
+
+  return null
 }
 
 private fun toPathsFilter(projectRoot: Path, cliPatterns: List<String>): PathsFilter {
@@ -135,10 +149,7 @@ private fun toPathsFilter(projectRoot: Path, cliPatterns: List<String>): PathsFi
       .collect(toList())
       .reversed()
   )
-  return JavaLintPatternPathFilter(
-    projectRoot,
-    javaLintPatterns
-  )
+  return JavaLintPatternPathFilter(projectRoot, javaLintPatterns)
 }
 
 enum class DefaultIjCodeStyle : JavaLintCodeStyle {
