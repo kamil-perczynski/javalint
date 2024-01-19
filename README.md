@@ -54,9 +54,6 @@ Following configuration will check all files formatting
     <pluginRepository>
       <id>github</id>
       <url>https://maven.pkg.github.com/kamil-perczynski/javalint</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
     </pluginRepository>
   </pluginRepositories>
 
@@ -72,7 +69,7 @@ Following configuration will check all files formatting
         <dependency>
           <groupId>io.github.kamilperczynski.javalint</groupId>
           <artifactId>javalint-ec4j-linter</artifactId>
-          <version>1.0-SNAPSHOT</version>
+          <version>1.0</version>
         </dependency>
       </dependencies>
 
