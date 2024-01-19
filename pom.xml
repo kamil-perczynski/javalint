@@ -21,7 +21,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <intellij-platform.version>233.11799.300</intellij-platform.version>
     <kotlin.version>1.9.10</kotlin.version>
-    <maven.deploy.skip>snapshots</maven.deploy.skip>
+    <maven.deploy.skip>true</maven.deploy.skip>
   </properties>
 
   <distributionManagement>
