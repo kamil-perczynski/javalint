@@ -13,6 +13,7 @@
 
   <properties>
     <kotlin.version>1.9.10</kotlin.version>
+    <maven.deploy.skip>snapshots</maven.deploy.skip>
   </properties>
 
   <dependencies>
