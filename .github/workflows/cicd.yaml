@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref == 'refs/heads/main' && 'remote-s3' }}
+    environment: ${{ github.ref == 'refs/heads/main' && 'remote-s3' || null }}
     permissions:
       contents: read
       packages: write
