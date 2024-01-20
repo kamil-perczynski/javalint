@@ -12,10 +12,6 @@
   <artifactId>javalint-cli</artifactId>
   <packaging>jar</packaging>
 
-  <properties>
-    <maven.deploy.skip>snapshots</maven.deploy.skip>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>io.github.kamilperczynski.javalint</groupId>
