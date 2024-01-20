@@ -34,7 +34,7 @@ Basic usage:
 
 ```bash
 $ javalint               # checks formatting for all the files in this directory
-$ javalint src/**/.java  # checks all *.java files in src directory
+$ javalint src/**/*.java  # checks all *.java files in src directory
 $ javalint -F            # fixes formatting for all the files in this directory
 $ javalint --help        # print detailed usage information
 ```
