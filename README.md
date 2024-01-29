@@ -17,15 +17,6 @@ Distributed as command-line cli tool and a `Linter` implementation compatible wi
 * Executable jar
 * No configuration required
 
-## Demo
-
-CLI demo which fixes formatting in one file, changing indents and code wrapping.
-
-<p>
-<img alt="CLI demo" src="./docs/cli-demo.gif" width="1091" />
-</p>
-
-
 ## CLI usage
 
 CLI provides similar API as `Ktlint` CLI.
@@ -69,7 +60,7 @@ Following configuration will check all files formatting
         <dependency>
           <groupId>io.github.kamilperczynski.javalint</groupId>
           <artifactId>javalint-ec4j-linter</artifactId>
-          <version>1.1</version>
+          <version>1.2-SNAPSHOT</version>
         </dependency>
       </dependencies>
 
@@ -103,7 +94,50 @@ Following configuration will check all files formatting
 
 ## Gradle integration
 
-`...`
+```kotlin
+// build.gradle.kts
+
+// add editorconfig plugin
+plugins {
+  java
+  application
+  id("org.ec4j.editorconfig") version "0.1.0"
+}
+
+// add javalint releases repostiory
+repositories {
+  maven {
+    url = uri("https://s3.eu-north-1.amazonaws.com/kamil.perczynski-maven/release")
+  }
+}
+
+dependencies {
+  // other dependencies...
+  // add javalint-ec4j-linter dependency in editorconfig scope
+  editorconfig("io.github.kamilperczynski.javalint:javalint-ec4j-linter:1.1")
+}
+
+// disable default ec4j linters
+// optional: disable linting of the .profileconfig.json file
+editorconfig {
+  excludes = listOf(".profileconfig.json")
+  linters = listOf(
+    LinterConfig().also {
+      it.isEnabled = false
+      it.className = "org.ec4j.linters.TextLinter"
+    },
+    LinterConfig().also {
+      it.isEnabled = false
+      it.className = "org.ec4j.linters.XmlLinter"
+    }
+  )
+}
+
+// add editorconfigCheck task to succeed before compilation
+tasks.named("compileJava") {
+  dependsOn("editorconfigCheck")
+}
+```
 
 ## Legal Notices
 
