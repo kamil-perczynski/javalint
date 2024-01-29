@@ -60,7 +60,7 @@ Following configuration will check all files formatting
         <dependency>
           <groupId>io.github.kamilperczynski.javalint</groupId>
           <artifactId>javalint-ec4j-linter</artifactId>
-          <version>1.2-SNAPSHOT</version>
+          <version>1.1</version>
         </dependency>
       </dependencies>
 
