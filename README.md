@@ -134,9 +134,7 @@ editorconfig {
 }
 
 // add editorconfigCheck task to succeed before compilation
-tasks.named("compileJava") {
-  dependsOn("editorconfigCheck")
-}
+task("compileJava").dependsOn("editorconfigCheck")
 ```
 
 ## Legal Notices
