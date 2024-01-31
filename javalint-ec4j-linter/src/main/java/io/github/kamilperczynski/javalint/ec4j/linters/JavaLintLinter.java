@@ -1,18 +1,25 @@
 package io.github.kamilperczynski.javalint.ec4j.linters;
 
-import io.github.kamilperczynski.javalint.formatter.ec.ECCodeStyle;
-import io.github.kamilperczynski.javalint.formatter.ec.ParsedECProperties;
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter;
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions;
 import io.github.kamilperczynski.javalint.formatter.NoopFormattingEvents;
+import io.github.kamilperczynski.javalint.formatter.ec.ECCodeStyle;
+import io.github.kamilperczynski.javalint.formatter.ec.ParsedECProperties;
 import org.ec4j.core.ResourceProperties;
 import org.ec4j.lint.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class JavaLintLinter implements Linter {
+
+  private static final Logger log = LoggerFactory.getLogger(JavaLintLinter.class);
+  private static final int _4MB = 4_000_000;
 
   private final IntellijFormatter formatter;
 
@@ -43,7 +50,12 @@ public class JavaLintLinter implements Linter {
   @Override
   public void process(Resource resource,
                       ResourceProperties resourceProperties,
-                      ViolationHandler violationHandler) {
+                      ViolationHandler violationHandler) throws IOException {
+    if (Files.size(resource.getPath()) > _4MB) {
+      log.info("File {} size is over 4MB - ignoring", resource);
+      return;
+    }
+
     ensureResourceIsRead(resource);
 
     final ECCodeStyle javaLintCodeStyle = new ECCodeStyle(
@@ -68,7 +80,7 @@ public class JavaLintLinter implements Linter {
     // Resource implements lazy file content loading
     // To ensure proper working of the plugin, it requires
     // reading the file regardless if we use Resource object or not
-    if (resource.getText() == null) {
+    if (resource.getTextAsCharSequence() == null) {
       throw new IllegalStateException("Impossible?");
     }
   }
