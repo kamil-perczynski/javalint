@@ -14,7 +14,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.ec4j.lint.api.Constants.DEFAULT_EXCLUDES;
 
 public class JavaLintLinter implements Linter {
 
@@ -31,15 +34,11 @@ public class JavaLintLinter implements Linter {
 
   @Override
   public List<String> getDefaultExcludes() {
-    return List.of(
-      "target",
-      "**/target/**",
-      "node_modules",
-      "**/node_modules/**",
-      ".git",
-      ".git/**",
-      ".gitignore"
-    );
+    final List<String> excludes = new ArrayList<>(DEFAULT_EXCLUDES);
+    excludes.add("**/node_modules");
+    excludes.add("**/node_modules/**");
+    excludes.add("**/.profileconfig.json");
+    return excludes;
   }
 
   @Override
