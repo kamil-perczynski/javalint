@@ -11,7 +11,6 @@ interface FormatterLanguage {
   fun registerFileType(fileTypeRegistry: CoreFileTypeRegistry)
   fun configureCodeStyleSettings(codeStyleSettings: CodeStyleSettings)
   fun registerProjectComponents(project: MockProject)
-
   fun registerProjectExtensions(extensionsArea: ExtensionsArea)
 
 }

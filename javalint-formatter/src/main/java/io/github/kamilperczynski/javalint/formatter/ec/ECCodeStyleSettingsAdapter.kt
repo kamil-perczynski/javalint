@@ -1,30 +1,17 @@
 package io.github.kamilperczynski.javalint.formatter.ec
 
-import com.intellij.json.JsonLanguage
-import com.intellij.json.formatter.JsonCodeStyleSettings
-import com.intellij.lang.java.JavaLanguage
-import com.intellij.lang.xml.XMLLanguage
+import com.intellij.application.options.codeStyle.properties.*
 import com.intellij.psi.codeStyle.CodeStyleSettings
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings
-import com.intellij.psi.codeStyle.JavaCodeStyleSettings
-import com.intellij.psi.formatter.xml.XmlCodeStyleSettings
-import io.github.kamilperczynski.javalint.formatter.ec.lang.*
+import io.github.kamilperczynski.javalint.formatter.ec.PropertyAssignmentResult.*
 import io.github.kamilperczynski.javalint.formatter.logging.Slf4j
-import org.jetbrains.yaml.YAMLLanguage
-import org.jetbrains.yaml.formatter.YAMLCodeStyleSettings
 import java.util.*
 import java.util.stream.Collectors
 
-private val javaECCodeStyleAdapter = JavaECCodeStyleAdapter()
-private val xmlECCodeStyleAdapter = XmlECCodeStyleAdapter()
-private val jsonECCodeStyleAdapter = JsonECCodeStyleAdapter()
-private val yamlECCodeStyleAdapter = YAMLECCodeStyleAdapter()
-private val commonECCodeStyleAdapter = CommonECCodeStyleAdapter()
-private val indentOptionsECCodeStyleAdapter = IndentOptionsECCodeStyleAdapter()
-
-class ECCodeStyleSettingsAdapter(private val codeStyleSettings: CodeStyleSettings) {
+class ECCodeStyleSettingsAdapter(codeStyleSettings: CodeStyleSettings) {
 
   companion object : Slf4j()
+
+  private val settingsAccessors = ECCodeStyleSettingsAccessors(codeStyleSettings)
 
   fun setIjProperty(ecProperty: ECProperty) {
     if (!isIjProperty(ecProperty)) {
@@ -41,60 +28,95 @@ class ECCodeStyleSettingsAdapter(private val codeStyleSettings: CodeStyleSetting
       .skip(2)
       .collect(Collectors.joining("_"))
 
-    val ijPropertyLang = parts[1]
-    val parsedProperty = ECProperty(ijProperty, ecProperty.rawValue)
+    val ijLang = parts[1]
+    val parsedProperty = ECProperty(ijProperty, ecProperty.value)
 
-    if (ijPropertyLang == "any") {
-      executeForAllCommonSettings(codeStyleSettings) {
-        commonECCodeStyleAdapter.setProperty(it, parsedProperty)
-          ?: log.warn("Unsupported property: {}", ecProperty.name)
+    if (ijLang == "any") {
+      val assignment = settingsAccessors.setCommonProperty(parsedProperty)
+      if (assignment != ASSIGNED) {
+        log.warn("Unsupported property: {}", ecProperty.name)
       }
       return
     }
 
-    val commonSettings = toCommonCodeStyleSettings(ijPropertyLang, codeStyleSettings)
-
-    when (ijPropertyLang) {
-      "java" -> javaECCodeStyleAdapter.setProperty(
-        codeStyleSettings.getCustomSettings(JavaCodeStyleSettings::class.java),
-        parsedProperty
+    when (settingsAccessors.setLanguageProperty(ijLang, parsedProperty)) {
+      ASSIGNED -> return
+      ACCESSOR_MISSING -> {}
+      INVALID_VALUE -> logInvalidValue(
+        ecProperty,
+        settingsAccessors.languagePropertyAccessor(ijLang, parsedProperty.name)
       )
-
-      "xml" -> xmlECCodeStyleAdapter.setProperty(
-        codeStyleSettings.getCustomSettings(XmlCodeStyleSettings::class.java),
-        parsedProperty
-      )
-
-      "json" -> jsonECCodeStyleAdapter.setProperty(
-        codeStyleSettings.getCustomSettings(JsonCodeStyleSettings::class.java),
-        parsedProperty
-      )
-
-      "yaml" -> yamlECCodeStyleAdapter.setProperty(
-        codeStyleSettings.getCustomSettings(YAMLCodeStyleSettings::class.java),
-        parsedProperty
-      )
-
-      else -> null
     }
-      ?: commonECCodeStyleAdapter.setProperty(commonSettings, parsedProperty)
-      ?: indentOptionsECCodeStyleAdapter.setProperty(commonSettings.indentOptions!!, parsedProperty)
-      ?: log.warn("Unsupported property: {}", ecProperty.name)
+
+    when (settingsAccessors.setCommonProperty(ijLang, parsedProperty)) {
+      ASSIGNED -> return
+      ACCESSOR_MISSING -> log.warn("Unsupported property: {}", ecProperty.name)
+      INVALID_VALUE -> logInvalidValue(
+        ecProperty,
+        settingsAccessors.commonPropertyAccessor(parsedProperty.name)
+      )
+    }
   }
 
-}
+  private fun logInvalidValue(ecProperty: ECProperty, accessor: CodeStylePropertyAccessor<*>?) {
+    if (accessor == null) {
+      return
+    }
 
-private fun toCommonCodeStyleSettings(
-  ijPropertyLanguage: String,
-  codeStyleSettings: CodeStyleSettings
-): CommonCodeStyleSettings {
-  return when (ijPropertyLanguage) {
-    "java" -> codeStyleSettings.getCommonSettings(JavaLanguage.INSTANCE)
-    "json" -> codeStyleSettings.getCommonSettings(JsonLanguage.INSTANCE)
-    "yaml" -> codeStyleSettings.getCommonSettings(YAMLLanguage.INSTANCE)
-    "xml" -> codeStyleSettings.getCommonSettings(XMLLanguage.INSTANCE)
-    else -> throw IllegalArgumentException("Unsupported ij property language: $ijPropertyLanguage")
+    when (accessor) {
+      is EnumPropertyAccessor ->
+        log.warn(
+          "Invalid value for property: {}, expected one of {} but was <{}>",
+          ecProperty.name,
+          accessor.choices,
+          ecProperty.value
+        )
+
+      is CodeStyleChoiceList ->
+        log.warn(
+          "Invalid value for property: {}, expected one of {} but was <{}>",
+          ecProperty.name,
+          accessor.choices,
+          ecProperty.value
+        )
+
+      is IntegerAccessor ->
+        log.warn(
+          "Invalid value for property: {}, expected integer but was <{}>",
+          ecProperty.name,
+          ecProperty.value
+        )
+
+      is StringAccessor ->
+        log.warn(
+          "Invalid value for property: {}, expected string but was <{}>",
+          ecProperty.name,
+          ecProperty.value
+        )
+
+      else ->
+        log.warn(
+          "Invalid value for property: {}, expected {} but was <{}>",
+          ecProperty.name,
+          accessor.javaClass,
+          ecProperty.value
+        )
+    }
   }
+
+  fun setCommonProperty(property: ECProperty) {
+    val result = settingsAccessors.setCommonProperty(property)
+
+    when (result) {
+      ASSIGNED -> return
+      ACCESSOR_MISSING -> log.warn("Unsupported property: {}", property.name)
+      INVALID_VALUE -> logInvalidValue(
+        property,
+        settingsAccessors.commonPropertyAccessor(property.name)
+      )
+    }
+  }
+
 }
 
 private fun isIjProperty(property: ECProperty): Boolean {
@@ -103,15 +125,4 @@ private fun isIjProperty(property: ECProperty): Boolean {
     || property.name.startsWith("ij_xml")
     || property.name.startsWith("ij_json")
     || property.name.startsWith("ij_yaml"))
-}
-
-fun executeForAllCommonSettings(
-  rootSettings: CodeStyleSettings,
-  fn: (commonSettings: CommonCodeStyleSettings) -> Unit
-) {
-  fn.invoke(rootSettings)
-  fn.invoke(rootSettings.getCommonSettings(JavaLanguage.INSTANCE))
-  fn.invoke(rootSettings.getCommonSettings(XMLLanguage.INSTANCE))
-  fn.invoke(rootSettings.getCommonSettings(JsonLanguage.INSTANCE))
-  fn.invoke(rootSettings.getCommonSettings(YAMLLanguage.INSTANCE))
 }

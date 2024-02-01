@@ -325,6 +325,12 @@
       <artifactId>ec4j-core</artifactId>
       <version>0.3.0</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.25.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -339,45 +345,6 @@
         <artifactId>kotlin-maven-plugin</artifactId>
       </plugin>
 
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.6.0</version>
-        <executions>
-          <execution>
-            <id>execute-codegen</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>java</goal>
-            </goals>
-            <configuration>
-              <includePluginDependencies>true</includePluginDependencies>
-              <mainClass>io.github.kamilperczynski.javalint.codegen.JavaLintCodegen</mainClass>
-              <arguments>
-                <argument>${project.basedir}</argument>
-                <argument>${project.build.directory}/generated-sources/annotations</argument>
-                <argument>io.github.kamilperczynski.javalint.formatter.ec.lang</argument>
-                <argument>src/main/resources/javalint-codegen.hbs</argument>
-                <argument>
-                  com.intellij.psi.codeStyle.CommonCodeStyleSettings,
-                  com.intellij.psi.codeStyle.CommonCodeStyleSettings$IndentOptions,
-                  com.intellij.psi.codeStyle.JavaCodeStyleSettings,
-                  com.intellij.psi.formatter.xml.XmlCodeStyleSettings,
-                  com.intellij.json.formatter.JsonCodeStyleSettings,
-                  org.jetbrains.yaml.formatter.YAMLCodeStyleSettings
-                </argument>
-              </arguments>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>io.github.kamilperczynski.javalint</groupId>
-            <artifactId>javalint-codegen</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
     </plugins>
   </build>
 
