@@ -2,8 +2,6 @@ package io.github.kamilperczynski.javalint.formatter.ec
 
 import com.intellij.lang.java.JavaLanguage
 import com.intellij.lang.xml.XMLLanguage
-import com.intellij.psi.codeStyle.CodeStyleSettings
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings.WRAP_ALWAYS
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings.WRAP_ON_EVERY_ITEM
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings
@@ -11,10 +9,6 @@ import com.intellij.psi.formatter.xml.XmlCodeStyleSettings
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
 import io.github.kamilperczynski.javalint.formatter.NoopFormattingEvents
-import io.github.kamilperczynski.javalint.formatter.lang.JavaFormatterLanguage
-import io.github.kamilperczynski.javalint.formatter.lang.JsonFormatterLanguage
-import io.github.kamilperczynski.javalint.formatter.lang.XmlFormatterLanguage
-import io.github.kamilperczynski.javalint.formatter.lang.YamlFormatterLanguage
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.formatter.YAMLCodeStyleSettings
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -51,7 +45,7 @@ class ECCodeStyleTest {
 
     val file = Paths.get("ECCodeStyle.java")
 
-    val codeStyleSettings = createCodeSettings()
+    val codeStyleSettings = someCodeSettings()
 
     // when:
     val charset = ecCodeStyle.charset(file)
@@ -60,6 +54,7 @@ class ECCodeStyleTest {
     // then:
     assertEquals(StandardCharsets.ISO_8859_1, charset)
 
+    assertEquals("\r\n", configuredSettings.LINE_SEPARATOR)
     assertEquals(2, configuredSettings.indentOptions.INDENT_SIZE)
     assertEquals(2, configuredSettings.indentOptions.CONTINUATION_INDENT_SIZE)
 
@@ -68,6 +63,7 @@ class ECCodeStyleTest {
     assertEquals(2, javaCommonSettings.indentOptions!!.CONTINUATION_INDENT_SIZE)
 
     assertEquals(WRAP_ON_EVERY_ITEM, javaCommonSettings.METHOD_CALL_CHAIN_WRAP)
+    assertEquals(true, javaCommonSettings.SPACE_WITHIN_ARRAY_INITIALIZER_BRACES)
     assertEquals(true, javaCommonSettings.WRAP_FIRST_METHOD_IN_CALL_CHAIN)
     assertEquals(WRAP_ALWAYS, javaCommonSettings.CALL_PARAMETERS_WRAP)
 
@@ -85,7 +81,7 @@ class ECCodeStyleTest {
     val ecCodeStyle = ECCodeStyle(ecProperties)
 
     val file = Paths.get("ECCodeStyle.java")
-    val codeStyleSettings = createCodeSettings()
+    val codeStyleSettings = someCodeSettings()
 
     // when:
     val configuredSettings = ecCodeStyle.configure(file, codeStyleSettings)
@@ -94,10 +90,7 @@ class ECCodeStyleTest {
     val javaSettings = configuredSettings.getCustomSettings(JavaCodeStyleSettings::class.java)
 
     assertEquals(true, javaSettings.ALIGN_MULTILINE_RECORDS)
-    assertEquals(
-      WRAP_ALWAYS,
-      javaSettings.RECORD_COMPONENTS_WRAP
-    )
+    assertEquals(WRAP_ALWAYS, javaSettings.RECORD_COMPONENTS_WRAP)
   }
 
   @Test
@@ -107,7 +100,7 @@ class ECCodeStyleTest {
     val ecCodeStyle = ECCodeStyle(ecProperties)
 
     val file = Paths.get("application.yaml")
-    val codeStyleSettings = createCodeSettings()
+    val codeStyleSettings = someCodeSettings()
 
     // when:
     val configuredSettings = ecCodeStyle.configure(file, codeStyleSettings)
@@ -127,7 +120,7 @@ class ECCodeStyleTest {
     val ecCodeStyle = ECCodeStyle(ecProperties)
 
     val file = Paths.get("pom.xml")
-    val codeStyleSettings = createCodeSettings()
+    val codeStyleSettings = someCodeSettings()
 
     // when:
     val configuredSettings = ecCodeStyle.configure(file, codeStyleSettings)
@@ -139,15 +132,7 @@ class ECCodeStyleTest {
     assertEquals(3, xmlCommonSettings.indentOptions!!.INDENT_SIZE)
     assertEquals(WRAP_ALWAYS, xmlCustomSettings.XML_ATTRIBUTE_WRAP)
     assertEquals(true, xmlCustomSettings.XML_KEEP_WHITESPACES)
+    assertEquals(2, xmlCustomSettings.XML_WHITE_SPACE_AROUND_CDATA)
   }
 
-}
-
-private fun createCodeSettings(): CodeStyleSettings {
-  val codeStyleSettings = CodeStyleSettingsManager.createTestSettings(null)
-  JavaFormatterLanguage().configureCodeStyleSettings(codeStyleSettings)
-  XmlFormatterLanguage().configureCodeStyleSettings(codeStyleSettings)
-  JsonFormatterLanguage().configureCodeStyleSettings(codeStyleSettings)
-  YamlFormatterLanguage().configureCodeStyleSettings(codeStyleSettings)
-  return codeStyleSettings
 }

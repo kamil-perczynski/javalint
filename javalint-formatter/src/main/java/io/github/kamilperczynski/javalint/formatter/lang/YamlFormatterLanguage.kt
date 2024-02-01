@@ -40,7 +40,6 @@ class YamlFormatterLanguage : FormatterLanguage {
   }
 
   override fun registerFileType(fileTypeRegistry: CoreFileTypeRegistry) {
-
     fileTypeRegistry.registerFileType(YAMLFileType.YML, YAMLFileType.DEFAULT_EXTENSION)
     fileTypeRegistry.registerFileType(YAMLFileType.YML, "yaml")
   }

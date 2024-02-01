@@ -11,10 +11,6 @@
 
   <artifactId>javalint-ec4j-linter</artifactId>
 
-  <properties>
-    <kotlin.version>1.9.10</kotlin.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.ec4j.linters</groupId>

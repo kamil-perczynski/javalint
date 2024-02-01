@@ -31,7 +31,6 @@ class JavaFormatterLanguage : FormatterLanguage {
     )
 
     LanguageASTFactory.INSTANCE.addExplicitExtension(JavaLanguage.INSTANCE, JavaASTFactory())
-    LanguageASTFactory.INSTANCE.addExplicitExtension(JavaLanguage.INSTANCE, JavaASTFactory())
   }
 
   override fun configureCodeStyleSettings(codeStyleSettings: CodeStyleSettings) {
