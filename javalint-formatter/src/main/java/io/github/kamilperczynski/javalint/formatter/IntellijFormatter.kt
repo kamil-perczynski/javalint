@@ -47,7 +47,10 @@ import io.github.kamilperczynski.javalint.formatter.lang.*
 import java.awt.EventQueue
 import java.nio.file.Path
 
-class IntellijFormatter(private val options: IntellijFormatterOptions) {
+class IntellijFormatter(
+  private val homePath: Path,
+  private val formatterEvents: FormatterEvents
+) {
 
   private val projectCodeStyleSettingsManager: ProjectCodeStyleSettingsManager
   private val virtualFileManager: VirtualFileManager
@@ -69,7 +72,7 @@ class IntellijFormatter(private val options: IntellijFormatterOptions) {
     System.setProperty("java.formatter.chained.calls.pre212.compatibility", "false")
     System.setProperty("platform.random.idempotence.check.rate", "1000")
 
-    setStubbedHomePath(options.homePath)
+    setStubbedHomePath(homePath)
 
     val applicationEnv = CoreApplicationEnvironment(Disposer.newDisposable())
 
@@ -134,18 +137,18 @@ class IntellijFormatter(private val options: IntellijFormatterOptions) {
     val psiFile = toPsiFile(relativeFile)
 
     if (psiFile == null) {
-      options.formatterEvents.fileIgnored(relativeFile)
+      formatterEvents.fileIgnored(relativeFile)
       return
     }
 
-    options.formatterEvents.fileFormattingStarted(relativeFile)
+    formatterEvents.fileFormattingStarted(relativeFile)
 
     val originalContent = psiFile.textToCharArray()
     val reformattedElement = codeStyleManager.reformat(psiFile)
 
     val isModified = !psiFile.textToCharArray().contentEquals(originalContent)
 
-    options.formatterEvents.fileFormattingEnd(relativeFile, isModified)
+    formatterEvents.fileFormattingEnd(relativeFile, isModified)
 
     if (isModified) {
       onFileFormatted.invoke(relativeFile, reformattedElement)
@@ -153,7 +156,7 @@ class IntellijFormatter(private val options: IntellijFormatterOptions) {
   }
 
   private fun toPsiFile(relativeFile: Path): PsiFile? {
-    val absoluteFilePath = options.homePath.resolve(relativeFile)
+    val absoluteFilePath = homePath.resolve(relativeFile)
     val virtualFile = toLocalVirtualFile(virtualFileManager, absoluteFilePath.toString())
 
     if (virtualFile.fileType.isBinary) {

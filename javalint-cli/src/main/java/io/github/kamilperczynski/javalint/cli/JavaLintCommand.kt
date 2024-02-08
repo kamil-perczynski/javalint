@@ -7,7 +7,6 @@ import io.github.kamilperczynski.javalint.cli.commands.CheckFormattingCommandEve
 import io.github.kamilperczynski.javalint.cli.commands.FixFormattingCommand
 import io.github.kamilperczynski.javalint.cli.commands.FixFormattingCommandEvents
 import io.github.kamilperczynski.javalint.cli.crawler.*
-import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
 import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import io.github.kamilperczynski.javalint.formatter.ec.ECCodeStyle
 import io.github.kamilperczynski.javalint.formatter.ec.ECFile
@@ -117,14 +116,11 @@ class JavaLintCommand : Callable<Int> {
 
     if (format) {
       val formatterEvents = FixFormattingCommandEvents(projectRoot)
-      val options = IntellijFormatterOptions(projectRoot, formatterEvents)
-
-      return FixFormattingCommand(paths, javaLintCodeStyle, options).call()
+      return FixFormattingCommand(paths, javaLintCodeStyle, projectRoot, formatterEvents).call()
     }
 
     val formatterEvents = CheckFormattingCommandEvents(projectRoot, limit)
-    val options = IntellijFormatterOptions(projectRoot, formatterEvents)
-    return CheckFormattingCommand(paths, javaLintCodeStyle, options).call()
+    return CheckFormattingCommand(paths, javaLintCodeStyle, projectRoot, formatterEvents).call()
   }
 
 }

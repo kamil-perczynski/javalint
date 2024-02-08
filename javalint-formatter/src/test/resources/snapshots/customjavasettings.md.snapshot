@@ -1,0 +1,79 @@
+| Property                                                | Possible values                                                   | Example    |
+| ------------------------------------------------------- | ----------------------------------------------------------------- | ---------- |
+| align_multiline_annotation_parameters                   | false, true                                                       | false      |
+| align_multiline_deconstruction_list_components          | false, true                                                       | false      |
+| align_multiline_records                                 | false, true                                                       | false      |
+| align_multiline_text_blocks                             | false, true                                                       | false      |
+| align_types_in_multi_catch                              | false, true                                                       | false      |
+| annotation_parameter_wrap                               | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| blank_lines_around_initializer                          | integer                                                           | 4          |
+| class_count_to_use_import_on_demand                     | integer                                                           | 1          |
+| class_names_in_javadoc                                  | integer                                                           | 3          |
+| deconstruction_list_wrap                                | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| do_not_wrap_after_single_annotation                     | false, true                                                       | false      |
+| do_not_wrap_after_single_annotation_in_parameter        | false, true                                                       | false      |
+| doc_add_blank_line_after_description                    | false, true                                                       | false      |
+| doc_add_blank_line_after_param_comments                 | false, true                                                       | false      |
+| doc_add_blank_line_after_return                         | false, true                                                       | false      |
+| doc_add_p_tag_on_empty_lines                            | false, true                                                       | false      |
+| doc_align_exception_comments                            | false, true                                                       | false      |
+| doc_align_param_comments                                | false, true                                                       | false      |
+| doc_do_not_wrap_if_one_line                             | false, true                                                       | false      |
+| doc_enable_formatting                                   | false, true                                                       | false      |
+| doc_enable_leading_asterisks                            | false, true                                                       | false      |
+| doc_indent_on_continuation                              | false, true                                                       | false      |
+| doc_keep_empty_lines                                    | false, true                                                       | false      |
+| doc_keep_empty_parameter_tag                            | false, true                                                       | false      |
+| doc_keep_empty_return_tag                               | false, true                                                       | false      |
+| doc_keep_empty_throws_tag                               | false, true                                                       | false      |
+| doc_keep_invalid_tags                                   | false, true                                                       | false      |
+| doc_param_description_on_new_line                       | false, true                                                       | false      |
+| doc_preserve_line_breaks                                | false, true                                                       | false      |
+| doc_use_throws_not_exception_tag                        | false, true                                                       | false      |
+| field_name_prefix                                       | string                                                            | string     |
+| field_name_suffix                                       | string                                                            | string     |
+| generate_final_locals                                   | false, true                                                       | false      |
+| generate_final_parameters                               | false, true                                                       | false      |
+| imports_layout                                          | values list                                                       | none       |
+| insert_inner_class_imports                              | false, true                                                       | false      |
+| insert_override_annotation                              | false, true                                                       | false      |
+| layout_static_imports_separately                        | false, true                                                       | false      |
+| local_variable_name_prefix                              | string                                                            | string     |
+| local_variable_name_suffix                              | string                                                            | string     |
+| multi_catch_types_wrap                                  | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| names_count_to_use_import_on_demand                     | integer                                                           | 2          |
+| new_line_after_lparen_in_annotation                     | false, true                                                       | false      |
+| new_line_after_lparen_in_deconstruction_pattern         | false, true                                                       | false      |
+| new_line_after_lparen_in_record_header                  | false, true                                                       | false      |
+| packages_to_use_import_on_demand                        | values list                                                       | none       |
+| parameter_name_prefix                                   | string                                                            | string     |
+| parameter_name_suffix                                   | string                                                            | string     |
+| prefer_longer_names                                     | false, true                                                       | false      |
+| record_components_wrap                                  | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| repeat_synchronized                                     | false, true                                                       | false      |
+| replace_instanceof_and_cast                             | false, true                                                       | false      |
+| replace_null_check                                      | false, true                                                       | false      |
+| replace_sum_lambda_with_method_ref                      | false, true                                                       | false      |
+| rparen_on_new_line_in_annotation                        | false, true                                                       | false      |
+| rparen_on_new_line_in_deconstruction_pattern            | false, true                                                       | false      |
+| rparen_on_new_line_in_record_header                     | false, true                                                       | false      |
+| space_after_closing_angle_bracket_in_type_argument      | false, true                                                       | false      |
+| space_before_colon_in_foreach                           | false, true                                                       | false      |
+| space_before_deconstruction_list                        | false, true                                                       | false      |
+| space_before_opening_angle_bracket_in_type_parameter    | false, true                                                       | false      |
+| space_inside_one_line_enum_braces                       | false, true                                                       | false      |
+| spaces_around_annotation_eq                             | false, true                                                       | false      |
+| spaces_around_type_bounds_in_type_parameters            | false, true                                                       | false      |
+| spaces_within_angle_brackets                            | false, true                                                       | false      |
+| spaces_within_deconstruction_list                       | false, true                                                       | false      |
+| spaces_within_record_header                             | false, true                                                       | false      |
+| static_field_name_prefix                                | string                                                            | string     |
+| static_field_name_suffix                                | string                                                            | string     |
+| subclass_name_prefix                                    | string                                                            | string     |
+| subclass_name_suffix                                    | string                                                            | string     |
+| test_name_prefix                                        | string                                                            | string     |
+| test_name_suffix                                        | string                                                            | string     |
+| use_external_annotations                                | false, true                                                       | false      |
+| use_fq_class_names                                      | false, true                                                       | false      |
+| use_single_class_imports                                | false, true                                                       | false      |
+| visibility                                              | string                                                            | string     |

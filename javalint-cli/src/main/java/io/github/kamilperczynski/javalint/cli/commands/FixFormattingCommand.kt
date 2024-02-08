@@ -1,9 +1,8 @@
 package io.github.kamilperczynski.javalint.cli.commands
 
 import com.intellij.util.io.toByteArray
-import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter
-import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
+import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import java.nio.CharBuffer
 import java.nio.file.Files
 import java.nio.file.Path
@@ -14,15 +13,16 @@ import java.util.concurrent.TimeUnit
 class FixFormattingCommand(
   private val paths: List<Path>,
   private val codeStyle: JavaLintCodeStyle,
-  private val options: IntellijFormatterOptions
+  private val projectPath: Path,
+  private val formatterEvents: FixFormattingCommandEvents
 ) : Callable<Int> {
 
 
   override fun call(): Int {
-    val formatter = IntellijFormatter(options)
+    val formatter = IntellijFormatter(projectPath, formatterEvents)
     val threadPool = Executors.newFixedThreadPool(2)
 
-    options.formatterEvents.formattingStarted()
+    formatterEvents.formattingStarted()
 
     for (path in paths) {
       formatter.formatFile(path, codeStyle) { _, el ->
@@ -31,12 +31,12 @@ class FixFormattingCommand(
         threadPool.submit {
           val byteBuffer = codeStyle.charset(path).encode(charBuffer)
 
-          Files.write(options.homePath.resolve(path), byteBuffer.toByteArray())
+          Files.write(projectPath.resolve(path), byteBuffer.toByteArray())
         }
       }
     }
 
-    options.formatterEvents.formattingEnd()
+    formatterEvents.formattingEnd()
 
     threadPool.shutdown()
     threadPool.awaitTermination(5, TimeUnit.MINUTES)

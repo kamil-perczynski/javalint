@@ -2,7 +2,7 @@ package io.github.kamilperczynski.javalint.formatter.ec
 
 import com.intellij.application.options.codeStyle.properties.*
 import com.intellij.psi.codeStyle.CodeStyleSettings
-import io.github.kamilperczynski.javalint.formatter.ec.PropertyAssignmentResult.*
+import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.*
 import io.github.kamilperczynski.javalint.formatter.logging.Slf4j
 import java.util.*
 import java.util.stream.Collectors
@@ -13,10 +13,10 @@ class ECCodeStyleSettingsAdapter(codeStyleSettings: CodeStyleSettings) {
 
   private val settingsAccessors = ECCodeStyleSettingsAccessors(codeStyleSettings)
 
-  fun setIjProperty(ecProperty: ECProperty) {
+  fun setIjProperty(ecProperty: ECProperty): ECPropertyAssignment {
     if (!isIjProperty(ecProperty)) {
       log.debug("Unknown property: {}", ecProperty.name)
-      return
+      return ACCESSOR_MISSING
     }
 
     val parts = ecProperty.name
@@ -36,25 +36,33 @@ class ECCodeStyleSettingsAdapter(codeStyleSettings: CodeStyleSettings) {
       if (assignment != ASSIGNED) {
         log.warn("Unsupported property: {}", ecProperty.name)
       }
-      return
+      return assignment
     }
 
     when (settingsAccessors.setLanguageProperty(ijLang, parsedProperty)) {
-      ASSIGNED -> return
+      ASSIGNED -> return ASSIGNED
       ACCESSOR_MISSING -> {}
-      INVALID_VALUE -> logInvalidValue(
-        ecProperty,
-        settingsAccessors.languagePropertyAccessor(ijLang, parsedProperty.name)
-      )
+      INVALID_VALUE -> {
+        val accessor = settingsAccessors.languagePropertyAccessor(ijLang, parsedProperty.name)
+        logInvalidValue(ecProperty, accessor)
+
+        return INVALID_VALUE
+      }
     }
 
-    when (settingsAccessors.setCommonProperty(ijLang, parsedProperty)) {
-      ASSIGNED -> return
-      ACCESSOR_MISSING -> log.warn("Unsupported property: {}", ecProperty.name)
-      INVALID_VALUE -> logInvalidValue(
-        ecProperty,
-        settingsAccessors.commonPropertyAccessor(parsedProperty.name)
-      )
+    return when (settingsAccessors.setCommonProperty(ijLang, parsedProperty)) {
+      ASSIGNED -> ASSIGNED
+      ACCESSOR_MISSING -> {
+        log.warn("Unsupported property: {}", ecProperty.name)
+        ACCESSOR_MISSING
+      }
+
+      INVALID_VALUE -> {
+        val accessor = settingsAccessors.commonPropertyAccessor(parsedProperty.name)
+        logInvalidValue(ecProperty, accessor)
+
+        INVALID_VALUE
+      }
     }
   }
 
@@ -64,14 +72,6 @@ class ECCodeStyleSettingsAdapter(codeStyleSettings: CodeStyleSettings) {
     }
 
     when (accessor) {
-      is EnumPropertyAccessor ->
-        log.warn(
-          "Invalid value for property: {}, expected one of {} but was <{}>",
-          ecProperty.name,
-          accessor.choices,
-          ecProperty.value
-        )
-
       is CodeStyleChoiceList ->
         log.warn(
           "Invalid value for property: {}, expected one of {} but was <{}>",
@@ -104,16 +104,26 @@ class ECCodeStyleSettingsAdapter(codeStyleSettings: CodeStyleSettings) {
     }
   }
 
-  fun setCommonProperty(property: ECProperty) {
-    val result = settingsAccessors.setCommonProperty(property)
+  fun setCommonProperty(property: ECProperty): ECPropertyAssignment {
+    val commonProperty = if (property.name.startsWith("ij_"))
+      property.copy(name = property.name.substring(3))
+    else
+      property
 
-    when (result) {
-      ASSIGNED -> return
-      ACCESSOR_MISSING -> log.warn("Unsupported property: {}", property.name)
-      INVALID_VALUE -> logInvalidValue(
-        property,
-        settingsAccessors.commonPropertyAccessor(property.name)
-      )
+    val result = settingsAccessors.setCommonProperty(commonProperty)
+
+    return when (result) {
+      ASSIGNED -> ASSIGNED
+      ACCESSOR_MISSING -> {
+        log.warn("Unsupported property: {}", property.name)
+        ACCESSOR_MISSING
+      }
+      INVALID_VALUE -> {
+        val accessor = settingsAccessors.commonPropertyAccessor(commonProperty.name)
+        logInvalidValue(property, accessor)
+
+        INVALID_VALUE
+      }
     }
   }
 

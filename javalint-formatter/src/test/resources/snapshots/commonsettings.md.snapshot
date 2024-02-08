@@ -1,0 +1,189 @@
+| Property                                                | Possible values                                                   | Example    |
+| ------------------------------------------------------- | ----------------------------------------------------------------- | ---------- |
+| align_consecutive_assignments                           | false, true                                                       | false      |
+| align_consecutive_variable_declarations                 | false, true                                                       | false      |
+| align_group_field_declarations                          | false, true                                                       | false      |
+| align_multiline_array_initializer_expression            | false, true                                                       | false      |
+| align_multiline_assignment                              | false, true                                                       | false      |
+| align_multiline_binary_operation                        | false, true                                                       | false      |
+| align_multiline_chained_methods                         | false, true                                                       | false      |
+| align_multiline_extends_list                            | false, true                                                       | false      |
+| align_multiline_for                                     | false, true                                                       | false      |
+| align_multiline_method_parentheses                      | false, true                                                       | false      |
+| align_multiline_parameters                              | false, true                                                       | false      |
+| align_multiline_parameters_in_calls                     | false, true                                                       | false      |
+| align_multiline_parenthesized_expression                | false, true                                                       | false      |
+| align_multiline_resources                               | false, true                                                       | false      |
+| align_multiline_ternary_operation                       | false, true                                                       | false      |
+| align_multiline_throws_list                             | false, true                                                       | false      |
+| align_subsequent_simple_methods                         | false, true                                                       | false      |
+| align_throws_keyword                                    | false, true                                                       | false      |
+| array_initializer_new_line_after_left_brace             | false, true                                                       | false      |
+| array_initializer_right_brace_on_new_line               | false, true                                                       | false      |
+| array_initializer_wrap                                  | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| assert_statement_colon_on_next_line                     | false, true                                                       | false      |
+| assert_statement_wrap                                   | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| assignment_wrap                                         | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| binary_operation_sign_on_next_line                      | false, true                                                       | false      |
+| binary_operation_wrap                                   | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| blank_lines_after_anonymous_class_header                | integer                                                           | 0          |
+| blank_lines_after_class_header                          | integer                                                           | 1          |
+| blank_lines_after_imports                               | integer                                                           | 1          |
+| blank_lines_after_package                               | integer                                                           | 3          |
+| blank_lines_around_class                                | integer                                                           | 2          |
+| blank_lines_around_field                                | integer                                                           | 0          |
+| blank_lines_around_field_in_interface                   | integer                                                           | 3          |
+| blank_lines_around_method                               | integer                                                           | 0          |
+| blank_lines_around_method_in_interface                  | integer                                                           | 0          |
+| blank_lines_before_class_end                            | integer                                                           | 3          |
+| blank_lines_before_imports                              | integer                                                           | 2          |
+| blank_lines_before_method_body                          | integer                                                           | 1          |
+| blank_lines_before_package                              | integer                                                           | 1          |
+| block_brace_style                                       | end_of_line, next_line, whitesmiths, gnu, next_line_if_wrapped    | end_of_line |
+| block_comment_add_space                                 | false, true                                                       | false      |
+| block_comment_at_first_column                           | false, true                                                       | false      |
+| builder_methods                                         | values list                                                       | none       |
+| call_parameters_new_line_after_left_paren               | false, true                                                       | false      |
+| call_parameters_right_paren_on_new_line                 | false, true                                                       | false      |
+| call_parameters_wrap                                    | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| case_statement_on_separate_line                         | false, true                                                       | false      |
+| catch_on_new_line                                       | false, true                                                       | false      |
+| class_annotation_wrap                                   | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| class_brace_style                                       | end_of_line, next_line, whitesmiths, gnu, next_line_if_wrapped    | end_of_line |
+| continuation_indent_size                                | integer                                                           | 3          |
+| do_not_indent_top_level_class_members                   | false, true                                                       | false      |
+| do_while_brace_force                                    | never, if_multiline, always                                       | never      |
+| else_on_new_line                                        | false, true                                                       | false      |
+| enum_constants_wrap                                     | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| extends_keyword_wrap                                    | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| extends_list_wrap                                       | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| field_annotation_wrap                                   | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| finally_on_new_line                                     | false, true                                                       | false      |
+| for_brace_force                                         | never, if_multiline, always                                       | never      |
+| for_statement_new_line_after_left_paren                 | false, true                                                       | false      |
+| for_statement_right_paren_on_new_line                   | false, true                                                       | false      |
+| for_statement_wrap                                      | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| if_brace_force                                          | never, if_multiline, always                                       | never      |
+| indent_break_from_case                                  | false, true                                                       | false      |
+| indent_case_from_switch                                 | false, true                                                       | false      |
+| indent_size                                             | integer                                                           | 1          |
+| indent_style                                            | space, tab                                                        | space      |
+| keep_blank_lines_before_right_brace                     | integer                                                           | 4          |
+| keep_blank_lines_between_package_declaration_and_header | integer                                                           | 4          |
+| keep_blank_lines_in_code                                | integer                                                           | 4          |
+| keep_blank_lines_in_declarations                        | integer                                                           | 3          |
+| keep_builder_methods_indents                            | false, true                                                       | false      |
+| keep_control_statement_in_one_line                      | false, true                                                       | false      |
+| keep_first_column_comment                               | false, true                                                       | false      |
+| keep_indents_on_empty_lines                             | false, true                                                       | false      |
+| keep_line_breaks                                        | false, true                                                       | false      |
+| keep_multiple_expressions_in_one_line                   | false, true                                                       | false      |
+| keep_simple_blocks_in_one_line                          | false, true                                                       | false      |
+| keep_simple_classes_in_one_line                         | false, true                                                       | false      |
+| keep_simple_lambdas_in_one_line                         | false, true                                                       | false      |
+| keep_simple_methods_in_one_line                         | false, true                                                       | false      |
+| label_indent_absolute                                   | false, true                                                       | false      |
+| label_indent_size                                       | integer                                                           | 2          |
+| lambda_brace_style                                      | end_of_line, next_line, whitesmiths, gnu, next_line_if_wrapped    | end_of_line |
+| line_comment_add_space                                  | false, true                                                       | false      |
+| line_comment_add_space_on_reformat                      | false, true                                                       | false      |
+| line_comment_at_first_column                            | false, true                                                       | false      |
+| max_line_length                                         | integer                                                           | 1          |
+| method_annotation_wrap                                  | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| method_brace_style                                      | end_of_line, next_line, whitesmiths, gnu, next_line_if_wrapped    | end_of_line |
+| method_call_chain_wrap                                  | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| method_parameters_new_line_after_left_paren             | false, true                                                       | false      |
+| method_parameters_right_paren_on_new_line               | false, true                                                       | false      |
+| method_parameters_wrap                                  | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| modifier_list_wrap                                      | false, true                                                       | false      |
+| parameter_annotation_wrap                               | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| parentheses_expression_new_line_after_left_paren        | false, true                                                       | false      |
+| parentheses_expression_right_paren_on_new_line          | false, true                                                       | false      |
+| place_assignment_sign_on_next_line                      | false, true                                                       | false      |
+| prefer_parameters_wrap                                  | false, true                                                       | false      |
+| resource_list_new_line_after_left_paren                 | false, true                                                       | false      |
+| resource_list_right_paren_on_new_line                   | false, true                                                       | false      |
+| resource_list_wrap                                      | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| smart_tabs                                              | false, true                                                       | false      |
+| space_after_colon                                       | false, true                                                       | false      |
+| space_after_comma                                       | false, true                                                       | false      |
+| space_after_comma_in_type_arguments                     | false, true                                                       | false      |
+| space_after_for_semicolon                               | false, true                                                       | false      |
+| space_after_quest                                       | false, true                                                       | false      |
+| space_after_type_cast                                   | false, true                                                       | false      |
+| space_before_annotation_array_initializer_left_brace    | false, true                                                       | false      |
+| space_before_annotation_parameter_list                  | false, true                                                       | false      |
+| space_before_array_initializer_left_brace               | false, true                                                       | false      |
+| space_before_catch_keyword                              | false, true                                                       | false      |
+| space_before_catch_left_brace                           | false, true                                                       | false      |
+| space_before_catch_parentheses                          | false, true                                                       | false      |
+| space_before_class_left_brace                           | false, true                                                       | false      |
+| space_before_colon                                      | false, true                                                       | false      |
+| space_before_comma                                      | false, true                                                       | false      |
+| space_before_do_left_brace                              | false, true                                                       | false      |
+| space_before_else_keyword                               | false, true                                                       | false      |
+| space_before_else_left_brace                            | false, true                                                       | false      |
+| space_before_finally_keyword                            | false, true                                                       | false      |
+| space_before_finally_left_brace                         | false, true                                                       | false      |
+| space_before_for_left_brace                             | false, true                                                       | false      |
+| space_before_for_parentheses                            | false, true                                                       | false      |
+| space_before_for_semicolon                              | false, true                                                       | false      |
+| space_before_if_left_brace                              | false, true                                                       | false      |
+| space_before_if_parentheses                             | false, true                                                       | false      |
+| space_before_method_call_parentheses                    | false, true                                                       | false      |
+| space_before_method_left_brace                          | false, true                                                       | false      |
+| space_before_method_parentheses                         | false, true                                                       | false      |
+| space_before_quest                                      | false, true                                                       | false      |
+| space_before_switch_left_brace                          | false, true                                                       | false      |
+| space_before_switch_parentheses                         | false, true                                                       | false      |
+| space_before_synchronized_left_brace                    | false, true                                                       | false      |
+| space_before_synchronized_parentheses                   | false, true                                                       | false      |
+| space_before_try_left_brace                             | false, true                                                       | false      |
+| space_before_try_parentheses                            | false, true                                                       | false      |
+| space_before_type_parameter_list                        | false, true                                                       | false      |
+| space_before_while_keyword                              | false, true                                                       | false      |
+| space_before_while_left_brace                           | false, true                                                       | false      |
+| space_before_while_parentheses                          | false, true                                                       | false      |
+| space_within_empty_array_initializer_braces             | false, true                                                       | false      |
+| space_within_empty_method_call_parentheses              | false, true                                                       | false      |
+| space_within_empty_method_parentheses                   | false, true                                                       | false      |
+| spaces_around_additive_operators                        | false, true                                                       | false      |
+| spaces_around_assignment_operators                      | false, true                                                       | false      |
+| spaces_around_bitwise_operators                         | false, true                                                       | false      |
+| spaces_around_equality_operators                        | false, true                                                       | false      |
+| spaces_around_lambda_arrow                              | false, true                                                       | false      |
+| spaces_around_logical_operators                         | false, true                                                       | false      |
+| spaces_around_method_ref_dbl_colon                      | false, true                                                       | false      |
+| spaces_around_multiplicative_operators                  | false, true                                                       | false      |
+| spaces_around_relational_operators                      | false, true                                                       | false      |
+| spaces_around_shift_operators                           | false, true                                                       | false      |
+| spaces_around_unary_operator                            | false, true                                                       | false      |
+| spaces_within_annotation_parentheses                    | false, true                                                       | false      |
+| spaces_within_array_initializer_braces                  | false, true                                                       | false      |
+| spaces_within_braces                                    | false, true                                                       | false      |
+| spaces_within_brackets                                  | false, true                                                       | false      |
+| spaces_within_cast_parentheses                          | false, true                                                       | false      |
+| spaces_within_catch_parentheses                         | false, true                                                       | false      |
+| spaces_within_for_parentheses                           | false, true                                                       | false      |
+| spaces_within_if_parentheses                            | false, true                                                       | false      |
+| spaces_within_method_call_parentheses                   | false, true                                                       | false      |
+| spaces_within_method_parentheses                        | false, true                                                       | false      |
+| spaces_within_parentheses                               | false, true                                                       | false      |
+| spaces_within_switch_parentheses                        | false, true                                                       | false      |
+| spaces_within_synchronized_parentheses                  | false, true                                                       | false      |
+| spaces_within_try_parentheses                           | false, true                                                       | false      |
+| spaces_within_while_parentheses                         | false, true                                                       | false      |
+| special_else_if_treatment                               | false, true                                                       | false      |
+| tab_width                                               | integer                                                           | 3          |
+| ternary_operation_signs_on_next_line                    | false, true                                                       | false      |
+| ternary_operation_wrap                                  | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| throws_keyword_wrap                                     | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| throws_list_wrap                                        | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| use_relative_indents                                    | false, true                                                       | false      |
+| variable_annotation_wrap                                | off, normal, split_into_lines, on_every_item, on_every_item       | off        |
+| while_brace_force                                       | never, if_multiline, always                                       | never      |
+| while_on_new_line                                       | false, true                                                       | false      |
+| wrap_comments                                           | false, true                                                       | false      |
+| wrap_first_method_in_call_chain                         | false, true                                                       | false      |
+| wrap_long_lines                                         | false, true                                                       | false      |
+| wrap_on_typing                                          | unknown                                                           |            |

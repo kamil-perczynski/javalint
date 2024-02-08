@@ -1,0 +1,16 @@
+| Property                                                | Possible values                                                   | Example    |
+| ------------------------------------------------------- | ----------------------------------------------------------------- | ---------- |
+| continuation_indent_size                                | integer                                                           | 3          |
+| end_of_line                                             | string                                                            | string     |
+| formatter_enabled                                       | false, true                                                       | false      |
+| formatter_off_tag                                       | string                                                            | string     |
+| formatter_on_tag                                        | string                                                            | string     |
+| formatter_tags_accept_regexp                            | false, true                                                       | false      |
+| formatter_tags_enabled                                  | false, true                                                       | false      |
+| indent_size                                             | integer                                                           | 1          |
+| indent_style                                            | space, tab                                                        | space      |
+| max_line_length                                         | integer                                                           | 1          |
+| smart_tabs                                              | false, true                                                       | false      |
+| tab_width                                               | integer                                                           | 3          |
+| visual_guides                                           | values list                                                       | none       |
+| wrap_on_typing                                          | false, true                                                       | false      |
