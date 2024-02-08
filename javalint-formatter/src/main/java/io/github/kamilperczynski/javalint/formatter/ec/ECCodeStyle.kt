@@ -50,10 +50,13 @@ class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
           )
         }
 
-        "ij_continuation_indent_size" ->
-          codeStyleSettingsAdapter.setCommonProperty(
-            ECProperty("continuation_indent_size", property.value)
-          )
+        "ij_continuation_indent_size",
+        "ij_formatter_enabled",
+        "ij_formatter_off_tag",
+        "ij_formatter_tags_enabled",
+        "ij_smart_tabs",
+        "ij_visual_guides",
+        "ij_wrap_on_typing" -> codeStyleSettingsAdapter.setCommonProperty(property)
 
         "end_of_line" -> {
           log.debug("EC property end_of_line is not supported in IJ 2023.3. https://youtrack.jetbrains.com/issue/IDEA-285800")

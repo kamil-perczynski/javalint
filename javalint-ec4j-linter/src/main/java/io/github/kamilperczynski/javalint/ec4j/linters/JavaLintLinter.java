@@ -1,7 +1,6 @@
 package io.github.kamilperczynski.javalint.ec4j.linters;
 
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter;
-import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions;
 import io.github.kamilperczynski.javalint.formatter.NoopFormattingEvents;
 import io.github.kamilperczynski.javalint.formatter.ec.ECCodeStyle;
 import io.github.kamilperczynski.javalint.formatter.ec.ParsedECProperties;
@@ -27,9 +26,7 @@ public class JavaLintLinter implements Linter {
   private final IntellijFormatter formatter;
 
   public JavaLintLinter() {
-    this.formatter = new IntellijFormatter(
-      new IntellijFormatterOptions(projectRootPath(), NoopFormattingEvents.INSTANCE)
-    );
+    this.formatter = new IntellijFormatter(projectRootPath(), NoopFormattingEvents.INSTANCE);
   }
 
   @Override

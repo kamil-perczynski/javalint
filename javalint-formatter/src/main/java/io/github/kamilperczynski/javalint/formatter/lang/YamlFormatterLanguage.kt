@@ -12,6 +12,8 @@ import org.jetbrains.yaml.YAMLLanguageCodeStyleSettingsProvider
 import org.jetbrains.yaml.YAMLParserDefinition
 import org.jetbrains.yaml.formatter.YAMLFormattingModelBuilder
 
+val yamlLanguageCodeStyleSettingsProvider = YAMLLanguageCodeStyleSettingsProvider()
+
 @Suppress("UnstableApiUsage")
 class YamlFormatterLanguage : FormatterLanguage {
 
@@ -28,8 +30,8 @@ class YamlFormatterLanguage : FormatterLanguage {
   }
 
   override fun configureCodeStyleSettings(codeStyleSettings: CodeStyleSettings) {
-    codeStyleSettings.registerCustomSettings(YAMLLanguageCodeStyleSettingsProvider())
-    codeStyleSettings.registerCommonSettings(YAMLLanguageCodeStyleSettingsProvider())
+    codeStyleSettings.registerCustomSettings(yamlLanguageCodeStyleSettingsProvider)
+    codeStyleSettings.registerCommonSettings(yamlLanguageCodeStyleSettingsProvider)
   }
 
   override fun registerProjectExtensions(extensionsArea: ExtensionsArea) {

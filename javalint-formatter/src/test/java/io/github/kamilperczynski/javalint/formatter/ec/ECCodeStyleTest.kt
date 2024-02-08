@@ -7,7 +7,6 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings.WRAP_ON_EVERY_ITEM
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings
 import com.intellij.psi.formatter.xml.XmlCodeStyleSettings
 import io.github.kamilperczynski.javalint.formatter.IntellijFormatter
-import io.github.kamilperczynski.javalint.formatter.IntellijFormatterOptions
 import io.github.kamilperczynski.javalint.formatter.NoopFormattingEvents
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.formatter.YAMLCodeStyleSettings
@@ -27,12 +26,7 @@ class ECCodeStyleTest {
     @JvmStatic
     @BeforeAll
     fun beforeAll() {
-      intellijFormatter = IntellijFormatter(
-        IntellijFormatterOptions(
-          baseDir,
-          NoopFormattingEvents.INSTANCE
-        )
-      )
+      intellijFormatter = IntellijFormatter(baseDir, NoopFormattingEvents.INSTANCE)
     }
 
   }

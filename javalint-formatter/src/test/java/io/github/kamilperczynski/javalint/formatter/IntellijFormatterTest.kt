@@ -20,10 +20,7 @@ class IntellijFormatterTest {
     fun setUp() {
       baseDir = Files.createTempDirectory("IntellijFormatterTest")
 
-      formatter = IntellijFormatter(
-        IntellijFormatterOptions(baseDir, NoopFormattingEvents.INSTANCE)
-      )
-
+      formatter = IntellijFormatter(baseDir, NoopFormattingEvents.INSTANCE)
     }
   }
 

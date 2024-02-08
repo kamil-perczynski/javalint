@@ -17,6 +17,8 @@ import com.intellij.psi.impl.PsiJavaModuleTreeChangePreprocessor
 import com.intellij.psi.impl.PsiTreeChangePreprocessor
 import com.intellij.psi.impl.source.tree.JavaASTFactory
 
+val javaLanguageCodeStyleSettingsProvider = JavaLanguageCodeStyleSettingsProvider()
+
 @Suppress("UnstableApiUsage")
 class JavaFormatterLanguage : FormatterLanguage {
 
@@ -34,8 +36,8 @@ class JavaFormatterLanguage : FormatterLanguage {
   }
 
   override fun configureCodeStyleSettings(codeStyleSettings: CodeStyleSettings) {
-    codeStyleSettings.registerCustomSettings(JavaLanguageCodeStyleSettingsProvider())
-    codeStyleSettings.registerCommonSettings(JavaLanguageCodeStyleSettingsProvider())
+    codeStyleSettings.registerCustomSettings(javaLanguageCodeStyleSettingsProvider)
+    codeStyleSettings.registerCommonSettings(javaLanguageCodeStyleSettingsProvider)
   }
 
   override fun registerProjectExtensions(extensionsArea: ExtensionsArea) {

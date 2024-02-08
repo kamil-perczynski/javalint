@@ -10,7 +10,7 @@ import java.lang.reflect.Field
 
 class CustomCodeStylePropertyMapper(
   private val customSettings: CustomCodeStyleSettings,
-    private val settingsProvider: LanguageCodeStyleSettingsProvider
+  private val settingsProvider: LanguageCodeStyleSettingsProvider
 ) : AbstractCodeStylePropertyMapper(customSettings.container) {
 
   override fun getSupportedFields(): MutableList<CodeStyleObjectDescriptor> {
