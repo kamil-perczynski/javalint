@@ -1,6 +1,9 @@
 package io.github.kamilperczynski.javalint.formatter.ec
 
-import com.intellij.application.options.codeStyle.properties.*
+import com.intellij.application.options.codeStyle.properties.CodeStyleChoiceList
+import com.intellij.application.options.codeStyle.properties.CodeStylePropertyAccessor
+import com.intellij.application.options.codeStyle.properties.IntegerAccessor
+import com.intellij.application.options.codeStyle.properties.StringAccessor
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.*
 import io.github.kamilperczynski.javalint.formatter.logging.Slf4j
@@ -33,10 +36,21 @@ class ECCodeStyleSettingsAdapter(codeStyleSettings: CodeStyleSettings) {
 
     if (ijLang == "any") {
       val assignment = settingsAccessors.setCommonProperty(parsedProperty)
-      if (assignment != ASSIGNED) {
-        log.warn("Unsupported property: {}", ecProperty.name)
+
+      return when (assignment) {
+        ASSIGNED -> ASSIGNED
+        ACCESSOR_MISSING -> {
+          log.warn("Unsupported property: {}", ecProperty.name)
+          ACCESSOR_MISSING
+        }
+
+        INVALID_VALUE -> {
+          val accessor = settingsAccessors.commonPropertyAccessor(parsedProperty.name)
+          logInvalidValue(ecProperty, accessor)
+
+          INVALID_VALUE
+        }
       }
-      return assignment
     }
 
     when (settingsAccessors.setLanguageProperty(ijLang, parsedProperty)) {
@@ -118,6 +132,7 @@ class ECCodeStyleSettingsAdapter(codeStyleSettings: CodeStyleSettings) {
         log.warn("Unsupported property: {}", property.name)
         ACCESSOR_MISSING
       }
+
       INVALID_VALUE -> {
         val accessor = settingsAccessors.commonPropertyAccessor(commonProperty.name)
         logInvalidValue(property, accessor)
