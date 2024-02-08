@@ -6,26 +6,44 @@ import io.github.kamilperczynski.javalint.formatter.logging.Slf4j
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
+import java.util.function.Supplier
 
-class ECCodeStyle(private val propertiesSource: ECSource) : JavaLintCodeStyle {
+class ECCodeStyle(private val ecSource: ECSource) : JavaLintCodeStyle {
+
+  private var lastEcProperties: Set<ECProperty>? = null
+  private var lastCodeStyleSettings: CodeStyleSettings? = null
 
   companion object : Slf4j()
 
   override fun charset(file: Path): Charset {
-    val ecCharsetValue = propertiesSource.charset(file)
+    val ecCharsetValue = ecSource.charset(file)
 
     return toCharset(ecCharsetValue)
   }
 
-  override fun configure(file: Path, settings: CodeStyleSettings): CodeStyleSettings {
-    val properties = propertiesSource.findECProps(file)
+  override fun configure(
+    file: Path,
+    settingsSupplier: Supplier<CodeStyleSettings>
+  ): CodeStyleSettings {
+    val ecProperties = ecSource.findECProps(file)
 
-    return codeStyleSettings(settings, properties)
+    if (ecProperties == lastEcProperties) {
+      log.debug("Reusing cached code style settings")
+      return lastCodeStyleSettings!!
+    }
+    
+    val settings = settingsSupplier.get()
+    val codeStyleSettings = configureCodeStyleSettings(settings, ecProperties)
+
+    lastCodeStyleSettings = codeStyleSettings
+    lastEcProperties = ecProperties
+
+    return codeStyleSettings
   }
 
-  private fun codeStyleSettings(
+  private fun configureCodeStyleSettings(
     settings: CodeStyleSettings,
-    editorConfigProperties: List<ECProperty>
+    editorConfigProperties: Set<ECProperty>
   ): CodeStyleSettings {
     val codeStyleSettingsAdapter = ECCodeStyleSettingsAdapter(settings)
 

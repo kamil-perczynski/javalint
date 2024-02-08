@@ -11,7 +11,7 @@ class ECFile(
 
   private var ecPropsService = createResourcePropertiesService(projectRoot, ecFileName)
 
-  override fun findECProps(file: Path): List<ECProperty> {
+  override fun findECProps(file: Path): Set<ECProperty> {
     val fullFilePath = projectRoot.resolve(file)
 
     val resourceProperties = ecPropsService.queryProperties(

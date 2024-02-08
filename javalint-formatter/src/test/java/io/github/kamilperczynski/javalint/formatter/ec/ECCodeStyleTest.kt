@@ -43,7 +43,7 @@ class ECCodeStyleTest {
 
     // when:
     val charset = ecCodeStyle.charset(file)
-    val configuredSettings = ecCodeStyle.configure(file, codeStyleSettings)
+    val configuredSettings = ecCodeStyle.configure(file) { codeStyleSettings }
 
     // then:
     assertEquals(StandardCharsets.ISO_8859_1, charset)
@@ -78,7 +78,7 @@ class ECCodeStyleTest {
     val codeStyleSettings = someCodeSettings()
 
     // when:
-    val configuredSettings = ecCodeStyle.configure(file, codeStyleSettings)
+    val configuredSettings = ecCodeStyle.configure(file) { codeStyleSettings }
 
     // then:
     val javaSettings = configuredSettings.getCustomSettings(JavaCodeStyleSettings::class.java)
@@ -97,7 +97,7 @@ class ECCodeStyleTest {
     val codeStyleSettings = someCodeSettings()
 
     // when:
-    val configuredSettings = ecCodeStyle.configure(file, codeStyleSettings)
+    val configuredSettings = ecCodeStyle.configure(file) { codeStyleSettings }
 
     // then:
     val yamlCommonSettings = configuredSettings.getCommonSettings(YAMLLanguage.INSTANCE)
@@ -117,7 +117,7 @@ class ECCodeStyleTest {
     val codeStyleSettings = someCodeSettings()
 
     // when:
-    val configuredSettings = ecCodeStyle.configure(file, codeStyleSettings)
+    val configuredSettings = ecCodeStyle.configure(file) { codeStyleSettings }
 
     // then:
     val xmlCommonSettings = configuredSettings.getCommonSettings(XMLLanguage.INSTANCE)
