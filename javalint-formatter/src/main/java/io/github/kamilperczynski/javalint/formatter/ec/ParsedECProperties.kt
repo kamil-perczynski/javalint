@@ -4,10 +4,11 @@ import org.ec4j.core.ResourceProperties
 import org.ec4j.core.model.Property
 import org.ec4j.core.model.PropertyType
 import java.nio.file.Path
+import java.util.stream.Collectors.toSet
 
 class ParsedECProperties(private val resourceProperties: ResourceProperties) : ECSource {
 
-  override fun findECProps(file: Path): List<ECProperty> {
+  override fun findECProps(file: Path): Set<ECProperty> {
     return toEditorConfigCodeStyle(resourceProperties)
   }
 
@@ -20,12 +21,12 @@ class ParsedECProperties(private val resourceProperties: ResourceProperties) : E
 fun findCharsetProperty(ecFileProps: ResourceProperties): String =
   ecFileProps.getValue(PropertyType.charset, "utf-8", true)
 
-fun toEditorConfigCodeStyle(resourceProperties: ResourceProperties): List<ECProperty> {
+fun toEditorConfigCodeStyle(resourceProperties: ResourceProperties): Set<ECProperty> {
   val properties = resourceProperties.properties
 
   return properties.values.stream()
     .map(::toEditorConfigProperty)
-    .toList()
+    .collect(toSet())
 }
 
 private fun toEditorConfigProperty(property: Property): ECProperty {

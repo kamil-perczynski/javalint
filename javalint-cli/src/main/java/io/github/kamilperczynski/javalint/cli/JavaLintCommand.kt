@@ -15,6 +15,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.Callable
+import java.util.function.Supplier
 import java.util.stream.Collectors.toList
 
 @Command(
@@ -151,5 +152,8 @@ private fun toPathsFilter(projectRoot: Path, cliPatterns: List<String>): PathsFi
 enum class DefaultIjCodeStyle : JavaLintCodeStyle {
   INSTANCE;
 
-  override fun configure(file: Path, settings: CodeStyleSettings): CodeStyleSettings = settings
+  override fun configure(
+    file: Path,
+    settingsSupplier: Supplier<CodeStyleSettings>
+  ): CodeStyleSettings = settingsSupplier.get()
 }

@@ -99,13 +99,12 @@ class IntellijFormatter(
     this.projectCodeStyleSettingsManager = projectComponents.projectCodeStyleSettingsManager
   }
 
-
   fun formatFile(
     filePath: Path,
     javaLintCodeStyle: JavaLintCodeStyle,
     onFileFormatted: (path: Path, formattedElement: PsiElement) -> Unit
   ) {
-    val configuredCodeStyle = toConfiguredCodeStyle(filePath, javaLintCodeStyle)
+    val configuredCodeStyle = javaLintCodeStyle.configure(filePath, this::createCodeStyleSettings)
 
     EventQueue.invokeAndWait {
       WriteCommandAction.runWriteCommandAction(project) {
@@ -117,17 +116,14 @@ class IntellijFormatter(
     }
   }
 
-  private fun toConfiguredCodeStyle(
-    filePath: Path,
-    javaLintCodeStyle: JavaLintCodeStyle
-  ): CodeStyleSettings {
+  private fun createCodeStyleSettings(): CodeStyleSettings {
     val codeStyleSettings = projectCodeStyleSettingsManager.createSettings()
 
     for (formatterLanguage in formatterLanguages) {
       formatterLanguage.configureCodeStyleSettings(codeStyleSettings)
     }
 
-    return javaLintCodeStyle.configure(filePath, codeStyleSettings)
+    return codeStyleSettings
   }
 
   private fun formatPath(
