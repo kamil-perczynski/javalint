@@ -18,6 +18,8 @@ import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.application.TransactionGuard
 import com.intellij.openapi.application.TransactionGuardImpl
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.editor.EditorFactory
+import com.intellij.openapi.editor.impl.EditorFactoryImpl
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vfs.VirtualFileManager
@@ -25,14 +27,12 @@ import com.intellij.openapi.vfs.local.CoreLocalVirtualFile
 import com.intellij.pom.PomModel
 import com.intellij.pom.core.impl.LangPomModel
 import com.intellij.pom.tree.TreeAspect
-import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
+import com.intellij.psi.*
 import com.intellij.psi.codeStyle.*
 import com.intellij.psi.impl.LocalImpl
 import com.intellij.psi.impl.PsiDocumentManagerBase
 import com.intellij.psi.impl.PsiManagerImpl
+import com.intellij.psi.impl.PsiSubstitutorFactoryImpl
 import com.intellij.psi.impl.source.PostprocessReformattingAspect
 import com.intellij.psi.impl.source.PostprocessReformattingAspectImpl
 import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl
@@ -110,7 +110,13 @@ class IntellijFormatter(
       WriteCommandAction.runWriteCommandAction(project) {
         projectCodeStyleSettingsManager.runWithLocalSettings(
           configuredCodeStyle,
-          Runnable { formatPath(filePath, onFileFormatted) }
+          Runnable {
+            try {
+              formatPath(filePath, onFileFormatted)
+            } catch (e: Exception) {
+              throw JavalintFormatterException("Formatting failure at file: $filePath", e)
+            }
+          }
         )
       }
     }
@@ -198,6 +204,16 @@ private fun registerNecessaryServices(applicationEnvironment: CoreApplicationEnv
   applicationEnvironment.registerApplicationService(
     TransactionGuard::class.java,
     TransactionGuardImpl()
+  )
+
+  applicationEnvironment.registerApplicationService(
+    PsiSubstitutorFactory::class.java,
+    PsiSubstitutorFactoryImpl()
+  )
+
+  applicationEnvironment.registerApplicationService(
+    EditorFactory::class.java,
+    EditorFactoryImpl()
   )
 
   applicationEnvironment.registerApplicationService(

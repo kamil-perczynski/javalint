@@ -8,6 +8,7 @@ import com.intellij.lang.injection.MultiHostInjector
 import com.intellij.openapi.editor.impl.DocumentWriteAccessGuard
 import com.intellij.openapi.extensions.ExtensionPoint
 import com.intellij.openapi.extensions.ExtensionsArea
+import com.intellij.psi.JavaModuleSystem
 import com.intellij.psi.LanguageInjector
 import com.intellij.psi.PsiElementFinder
 import com.intellij.psi.PsiTreeChangeListener
@@ -95,6 +96,12 @@ fun registerNecessaryExtensions(extensionsArea: ExtensionsArea) {
   extensionsArea.registerExtensionPoint(
     DocumentWriteAccessGuard.EP_NAME.name,
     DocumentWriteAccessGuard::class.java.name,
+    ExtensionPoint.Kind.BEAN_CLASS,
+    false
+  )
+  extensionsArea.registerExtensionPoint(
+    JavaModuleSystem.EP_NAME.name,
+    JavaModuleSystem::class.java.name,
     ExtensionPoint.Kind.BEAN_CLASS,
     false
   )

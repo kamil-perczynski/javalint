@@ -40,6 +40,26 @@ class IntellijFormatterTest {
     }
   }
 
+  /**
+   * Some very specific java files require com.intellij.javaModuleSystem
+   * extension to be present
+   */
+  @Test
+  fun testFormatJavaModuleSystemRequirement() {
+    // given:
+    val outfile = baseDir.resolve("JavaModuleSystemCase.java")
+    val source = readSnapshot("samples/JavaModuleSystemCase.java.sample")
+
+    Files.write(outfile, source.toByteArray(UTF_8), CREATE)
+
+    val codeStyle = TestIntellijCodeStyle(toIndentOptions())
+
+    // when & then:
+    formatter.formatFile(outfile, codeStyle) { _, el ->
+      assertEquals(source, String(el.textToCharArray()))
+    }
+  }
+
   @Test
   fun testFixFormattingJava() {
     // given:

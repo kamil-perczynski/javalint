@@ -1,0 +1,14 @@
+package perczynski.kamil.javalint.cases;
+
+class AClass<T> {
+  public class BClass<S> {
+  }
+}
+
+final class CClass extends AClass<Boo>.BClass<Foo> {
+
+  @SuppressWarnings("unused") // The comment after SuppressWarnings is important
+  public class EClass<T> extends DClass {
+  }
+
+}
