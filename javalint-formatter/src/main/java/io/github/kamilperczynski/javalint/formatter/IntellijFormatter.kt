@@ -27,8 +27,16 @@ import com.intellij.openapi.vfs.local.CoreLocalVirtualFile
 import com.intellij.pom.PomModel
 import com.intellij.pom.core.impl.LangPomModel
 import com.intellij.pom.tree.TreeAspect
-import com.intellij.psi.*
-import com.intellij.psi.codeStyle.*
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiManager
+import com.intellij.psi.PsiSubstitutorFactory
+import com.intellij.psi.codeStyle.CodeStyleManager
+import com.intellij.psi.codeStyle.CodeStyleSettings
+import com.intellij.psi.codeStyle.CodeStyleSettingsService
+import com.intellij.psi.codeStyle.CodeStyleSettingsServiceImpl
+import com.intellij.psi.codeStyle.ProjectCodeStyleSettingsManager
 import com.intellij.psi.impl.LocalImpl
 import com.intellij.psi.impl.PsiDocumentManagerBase
 import com.intellij.psi.impl.PsiManagerImpl
@@ -43,7 +51,12 @@ import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import io.github.kamilperczynski.javalint.formatter.internal.WriteableCoreLocalVirtualFile
 import io.github.kamilperczynski.javalint.formatter.internal.registerNecessaryExtensions
 import io.github.kamilperczynski.javalint.formatter.internal.registerNecessaryProjectExtensions
-import io.github.kamilperczynski.javalint.formatter.lang.*
+import io.github.kamilperczynski.javalint.formatter.lang.FormatterComponents
+import io.github.kamilperczynski.javalint.formatter.lang.FormatterLanguage
+import io.github.kamilperczynski.javalint.formatter.lang.JavaFormatterLanguage
+import io.github.kamilperczynski.javalint.formatter.lang.JsonFormatterLanguage
+import io.github.kamilperczynski.javalint.formatter.lang.XmlFormatterLanguage
+import io.github.kamilperczynski.javalint.formatter.lang.YamlFormatterLanguage
 import java.awt.EventQueue
 import java.nio.file.Path
 

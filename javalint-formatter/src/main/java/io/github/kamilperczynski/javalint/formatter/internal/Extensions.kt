@@ -13,7 +13,12 @@ import com.intellij.psi.LanguageInjector
 import com.intellij.psi.PsiElementFinder
 import com.intellij.psi.PsiTreeChangeListener
 import com.intellij.psi.augment.PsiAugmentProvider
-import com.intellij.psi.codeStyle.*
+import com.intellij.psi.codeStyle.CodeStyleSettingsProvider
+import com.intellij.psi.codeStyle.ExternalFormatProcessor
+import com.intellij.psi.codeStyle.FileIndentOptionsProvider
+import com.intellij.psi.codeStyle.FileTypeIndentOptionsProvider
+import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsContributor
+import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider
 import com.intellij.psi.impl.PsiElementFinderImpl
 import com.intellij.psi.impl.source.codeStyle.PostFormatProcessor
 import com.intellij.psi.impl.source.codeStyle.PreFormatProcessor
