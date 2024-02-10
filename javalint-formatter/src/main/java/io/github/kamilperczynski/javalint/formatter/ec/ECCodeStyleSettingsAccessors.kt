@@ -1,6 +1,11 @@
 package io.github.kamilperczynski.javalint.formatter.ec
 
-import com.intellij.application.options.codeStyle.properties.*
+import com.intellij.application.options.codeStyle.properties.CodeStyleChoiceList
+import com.intellij.application.options.codeStyle.properties.CodeStylePropertyAccessor
+import com.intellij.application.options.codeStyle.properties.CodeStyleValueList
+import com.intellij.application.options.codeStyle.properties.GeneralCodeStylePropertyMapper
+import com.intellij.application.options.codeStyle.properties.IntegerAccessor
+import com.intellij.application.options.codeStyle.properties.StringAccessor
 import com.intellij.json.JsonLanguage
 import com.intellij.json.formatter.JsonCodeStyleSettings
 import com.intellij.lang.java.JavaLanguage
@@ -8,7 +13,9 @@ import com.intellij.lang.xml.XMLLanguage
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings
 import com.intellij.psi.formatter.xml.XmlCodeStyleSettings
-import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.*
+import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.ACCESSOR_MISSING
+import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.ASSIGNED
+import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.INVALID_VALUE
 import io.github.kamilperczynski.javalint.formatter.lang.javaLanguageCodeStyleSettingsProvider
 import io.github.kamilperczynski.javalint.formatter.lang.jsonLanguageCodeStyleSettingsProvider
 import io.github.kamilperczynski.javalint.formatter.lang.xmlLanguageCodeStyleSettingsProvider

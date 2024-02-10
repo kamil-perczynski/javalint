@@ -21,8 +21,8 @@ public class LangPomModel extends PomModelImpl {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public <T extends PomModelAspect> T getModelAspect(@NotNull Class<T> aClass) {
-    //noinspection unchecked
     return myAspect.getClass().equals(aClass) || myAspect.getClass().getSuperclass().equals(aClass)
       ? (T) myAspect
       : super.getModelAspect(aClass);

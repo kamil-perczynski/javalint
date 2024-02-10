@@ -1,6 +1,10 @@
 package io.github.kamilperczynski.javalint.formatter.ec
 
-import org.ec4j.core.*
+import org.ec4j.core.Cache
+import org.ec4j.core.EditorConfigLoader
+import org.ec4j.core.Resource
+import org.ec4j.core.ResourcePath
+import org.ec4j.core.ResourcePropertiesService
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 
@@ -33,7 +37,10 @@ class ECFile(
 
 }
 
-private fun createResourcePropertiesService(projectRoot: Path, ecFileName: String): ResourcePropertiesService {
+private fun createResourcePropertiesService(
+  projectRoot: Path,
+  ecFileName: String
+): ResourcePropertiesService {
   return ResourcePropertiesService.builder()
     .cache(Cache.Caches.permanent())
     .loader(EditorConfigLoader.default_())

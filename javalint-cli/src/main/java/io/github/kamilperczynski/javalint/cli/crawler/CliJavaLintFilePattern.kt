@@ -1,6 +1,6 @@
 package io.github.kamilperczynski.javalint.cli.crawler
 
-import io.github.kamilperczynski.javalint.cli.crawler.JavaLintPathPattern.*
+import io.github.kamilperczynski.javalint.cli.crawler.JavaLintPathPattern.Type
 import java.nio.file.FileSystems
 import java.nio.file.Path
 import java.nio.file.PathMatcher

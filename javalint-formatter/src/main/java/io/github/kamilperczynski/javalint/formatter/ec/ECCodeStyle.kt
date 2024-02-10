@@ -31,7 +31,7 @@ class ECCodeStyle(private val ecSource: ECSource) : JavaLintCodeStyle {
       log.debug("Reusing cached code style settings")
       return lastCodeStyleSettings!!
     }
-    
+
     val settings = settingsSupplier.get()
     val codeStyleSettings = configureCodeStyleSettings(settings, ecProperties)
 

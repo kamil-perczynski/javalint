@@ -18,6 +18,8 @@ import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.application.TransactionGuard
 import com.intellij.openapi.application.TransactionGuardImpl
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.editor.EditorFactory
+import com.intellij.openapi.editor.impl.EditorFactoryImpl
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vfs.VirtualFileManager
@@ -29,10 +31,16 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
-import com.intellij.psi.codeStyle.*
+import com.intellij.psi.PsiSubstitutorFactory
+import com.intellij.psi.codeStyle.CodeStyleManager
+import com.intellij.psi.codeStyle.CodeStyleSettings
+import com.intellij.psi.codeStyle.CodeStyleSettingsService
+import com.intellij.psi.codeStyle.CodeStyleSettingsServiceImpl
+import com.intellij.psi.codeStyle.ProjectCodeStyleSettingsManager
 import com.intellij.psi.impl.LocalImpl
 import com.intellij.psi.impl.PsiDocumentManagerBase
 import com.intellij.psi.impl.PsiManagerImpl
+import com.intellij.psi.impl.PsiSubstitutorFactoryImpl
 import com.intellij.psi.impl.source.PostprocessReformattingAspect
 import com.intellij.psi.impl.source.PostprocessReformattingAspectImpl
 import com.intellij.psi.impl.source.codeStyle.CodeStyleManagerImpl
@@ -43,7 +51,12 @@ import io.github.kamilperczynski.javalint.formatter.codestyle.JavaLintCodeStyle
 import io.github.kamilperczynski.javalint.formatter.internal.WriteableCoreLocalVirtualFile
 import io.github.kamilperczynski.javalint.formatter.internal.registerNecessaryExtensions
 import io.github.kamilperczynski.javalint.formatter.internal.registerNecessaryProjectExtensions
-import io.github.kamilperczynski.javalint.formatter.lang.*
+import io.github.kamilperczynski.javalint.formatter.lang.FormatterComponents
+import io.github.kamilperczynski.javalint.formatter.lang.FormatterLanguage
+import io.github.kamilperczynski.javalint.formatter.lang.JavaFormatterLanguage
+import io.github.kamilperczynski.javalint.formatter.lang.JsonFormatterLanguage
+import io.github.kamilperczynski.javalint.formatter.lang.XmlFormatterLanguage
+import io.github.kamilperczynski.javalint.formatter.lang.YamlFormatterLanguage
 import java.awt.EventQueue
 import java.nio.file.Path
 
@@ -110,7 +123,13 @@ class IntellijFormatter(
       WriteCommandAction.runWriteCommandAction(project) {
         projectCodeStyleSettingsManager.runWithLocalSettings(
           configuredCodeStyle,
-          Runnable { formatPath(filePath, onFileFormatted) }
+          Runnable {
+            try {
+              formatPath(filePath, onFileFormatted)
+            } catch (e: Exception) {
+              throw JavalintFormatterException("Formatting failure at file: $filePath", e)
+            }
+          }
         )
       }
     }
@@ -198,6 +217,16 @@ private fun registerNecessaryServices(applicationEnvironment: CoreApplicationEnv
   applicationEnvironment.registerApplicationService(
     TransactionGuard::class.java,
     TransactionGuardImpl()
+  )
+
+  applicationEnvironment.registerApplicationService(
+    PsiSubstitutorFactory::class.java,
+    PsiSubstitutorFactoryImpl()
+  )
+
+  applicationEnvironment.registerApplicationService(
+    EditorFactory::class.java,
+    EditorFactoryImpl()
   )
 
   applicationEnvironment.registerApplicationService(

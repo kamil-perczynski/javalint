@@ -5,7 +5,9 @@ import com.intellij.application.options.codeStyle.properties.CodeStylePropertyAc
 import com.intellij.application.options.codeStyle.properties.IntegerAccessor
 import com.intellij.application.options.codeStyle.properties.StringAccessor
 import com.intellij.psi.codeStyle.CodeStyleSettings
-import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.*
+import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.ACCESSOR_MISSING
+import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.ASSIGNED
+import io.github.kamilperczynski.javalint.formatter.ec.ECPropertyAssignment.INVALID_VALUE
 import io.github.kamilperczynski.javalint.formatter.logging.Slf4j
 import java.util.*
 import java.util.stream.Collectors

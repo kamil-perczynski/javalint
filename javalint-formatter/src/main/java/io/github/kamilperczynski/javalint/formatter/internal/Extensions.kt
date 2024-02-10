@@ -8,11 +8,17 @@ import com.intellij.lang.injection.MultiHostInjector
 import com.intellij.openapi.editor.impl.DocumentWriteAccessGuard
 import com.intellij.openapi.extensions.ExtensionPoint
 import com.intellij.openapi.extensions.ExtensionsArea
+import com.intellij.psi.JavaModuleSystem
 import com.intellij.psi.LanguageInjector
 import com.intellij.psi.PsiElementFinder
 import com.intellij.psi.PsiTreeChangeListener
 import com.intellij.psi.augment.PsiAugmentProvider
-import com.intellij.psi.codeStyle.*
+import com.intellij.psi.codeStyle.CodeStyleSettingsProvider
+import com.intellij.psi.codeStyle.ExternalFormatProcessor
+import com.intellij.psi.codeStyle.FileIndentOptionsProvider
+import com.intellij.psi.codeStyle.FileTypeIndentOptionsProvider
+import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsContributor
+import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider
 import com.intellij.psi.impl.PsiElementFinderImpl
 import com.intellij.psi.impl.source.codeStyle.PostFormatProcessor
 import com.intellij.psi.impl.source.codeStyle.PreFormatProcessor
@@ -95,6 +101,12 @@ fun registerNecessaryExtensions(extensionsArea: ExtensionsArea) {
   extensionsArea.registerExtensionPoint(
     DocumentWriteAccessGuard.EP_NAME.name,
     DocumentWriteAccessGuard::class.java.name,
+    ExtensionPoint.Kind.BEAN_CLASS,
+    false
+  )
+  extensionsArea.registerExtensionPoint(
+    JavaModuleSystem.EP_NAME.name,
+    JavaModuleSystem::class.java.name,
     ExtensionPoint.Kind.BEAN_CLASS,
     false
   )
