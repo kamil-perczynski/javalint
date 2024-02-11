@@ -60,7 +60,7 @@ Following configuration will check all files formatting
         <dependency>
           <groupId>io.github.kamilperczynski.javalint</groupId>
           <artifactId>javalint-ec4j-linter</artifactId>
-          <version>1.1</version>
+          <version>1.2</version>
         </dependency>
       </dependencies>
 
@@ -114,7 +114,7 @@ repositories {
 dependencies {
   // other dependencies...
   // add javalint-ec4j-linter dependency in editorconfig scope
-  editorconfig("io.github.kamilperczynski.javalint:javalint-ec4j-linter:1.1")
+  editorconfig("io.github.kamilperczynski.javalint:javalint-ec4j-linter:1.2")
 }
 
 // disable default ec4j linters
