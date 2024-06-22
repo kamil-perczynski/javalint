@@ -133,10 +133,9 @@ editorconfig {
   )
 }
 
-// add editorconfigCheck task to succeed before assembly
-// this stage looks best suited because it does not interfere with compilation & tests
-// the check will run before jar packaging (with possible long-running shadowing)
-tasks.check.dependsOn("editorconfigCheck")
+tasks.check {
+  dependsOn("editorconfigCheck")
+}
 ```
 
 ## Legal Notices
