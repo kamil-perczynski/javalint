@@ -6,7 +6,7 @@
 
   <groupId>io.github.kamil-perczynski</groupId>
   <artifactId>javalint-parent</artifactId>
-  <version>1.3</version>
+  <version>1.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <description>Java, XML, JSON and YAML formatter based on Intellij CE formatter.</description>
