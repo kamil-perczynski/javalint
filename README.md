@@ -40,14 +40,6 @@ Following configuration will check all files formatting
 ```xml
 
 <project>
-  <!-- Add plugin repository -->
-  <pluginRepositories>
-    <pluginRepository>
-      <id>javalint-releases</id>
-      <url>https://s3.eu-north-1.amazonaws.com/kamil.perczynski-maven/release</url>
-    </pluginRepository>
-  </pluginRepositories>
-
   <!-- Add ec4j maven plugin -->
   <plugins>
     <plugin>
@@ -58,9 +50,9 @@ Following configuration will check all files formatting
       <!-- Add javalint-ec4j-linter -->
       <dependencies>
         <dependency>
-          <groupId>io.github.kamilperczynski.javalint</groupId>
+          <groupId>io.github.kamil-perczynski</groupId>
           <artifactId>javalint-ec4j-linter</artifactId>
-          <version>1.2</version>
+          <version>1.3</version>
         </dependency>
       </dependencies>
 
@@ -104,17 +96,10 @@ plugins {
   id("org.ec4j.editorconfig") version "0.1.0"
 }
 
-// add javalint releases repostiory
-repositories {
-  maven {
-    url = uri("https://s3.eu-north-1.amazonaws.com/kamil.perczynski-maven/release")
-  }
-}
-
 dependencies {
   // other dependencies...
   // add javalint-ec4j-linter dependency in editorconfig scope
-  editorconfig("io.github.kamilperczynski.javalint:javalint-ec4j-linter:1.2")
+  editorconfig("io.github.kamil-perczynski:javalint-ec4j-linter:1.3")
 }
 
 // disable default ec4j linters
