@@ -4,10 +4,36 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.github.kamilperczynski.javalint</groupId>
+  <groupId>io.github.kamil-perczynski</groupId>
   <artifactId>javalint-parent</artifactId>
   <version>1.3-SNAPSHOT</version>
   <packaging>pom</packaging>
+
+  <description>Java, XML, JSON and YAML formatter based on Intellij CE formatter.</description>
+  <url>https://github.com/kamil-perczynski/javalint/</url>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Kamil Perczyński</name>
+      <email>kamil.perczynski.95@gmail.com</email>
+      <organization>Kamil Perczyński</organization>
+      <organizationUrl>https://github.com/kamil-perczynski/</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/kamil-perczynski/javalint.git</connection>
+    <developerConnection>scm:git:ssh://github.com:kamil-perczynski/javalint.git
+    </developerConnection>
+    <url>https://github.com/kamil-perczynski/javalint/</url>
+  </scm>
 
   <modules>
     <module>javalint-formatter</module>
@@ -22,20 +48,6 @@
     <kotlin.version>1.9.10</kotlin.version>
     <maven.deploy.deployAtEnd>true</maven.deploy.deployAtEnd>
   </properties>
-
-  <distributionManagement>
-    <repository>
-      <id>javalint-releases</id>
-      <name>AWS Release Repository</name>
-      <url>s3://kamil.perczynski-maven/release</url>
-    </repository>
-
-    <snapshotRepository>
-      <id>javalint-snapshots</id>
-      <name>AWS Snapshot Repository</name>
-      <url>s3://kamil.perczynski-maven/snapshot</url>
-    </snapshotRepository>
-  </distributionManagement>
 
   <dependencyManagement>
     <dependencies>
@@ -67,14 +79,6 @@
   </dependencyManagement>
 
   <build>
-    <extensions>
-      <extension>
-        <groupId>com.github.seahen</groupId>
-        <artifactId>maven-s3-wagon</artifactId>
-        <version>1.3.3</version>
-      </extension>
-    </extensions>
-
     <pluginManagement>
       <plugins>
         <plugin>
@@ -157,6 +161,61 @@
             </execution>
           </executions>
         </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>3.2.4</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>0.5.0</version>
+          <extensions>true</extensions>
+          <configuration>
+            <publishingServerId>central</publishingServerId>
+            <skipPublishing>true</skipPublishing>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.7.0</version>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.3.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -164,6 +223,21 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+          <skipPublishing>true</skipPublishing>
+          <excludeArtifacts>javalint-cli</excludeArtifacts>
+        </configuration>
       </plugin>
     </plugins>
   </build>
