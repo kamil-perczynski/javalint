@@ -77,7 +77,7 @@ public class JavaLintLinter implements Linter {
     formatter.formatFile(resource.getPath(), currentEcCodeStyle, (path, psiElement) -> {
       final Violation violation = new Violation(
         resource,
-        new Location(1, resource.length()),
+        new Location(1, 1),
         new ReplaceFileContentEdit(path, new String(psiElement.textToCharArray())),
         this,
         "code-style"
