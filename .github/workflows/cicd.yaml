@@ -3,13 +3,15 @@ name: Build maven project
 on:
   pull_request:
   push:
+    tags:
+      - 'v[0-9]+.[0-9]+'
     branches:
       - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref == 'refs/heads/main' && 'remote-s3' || null }}
+    environment: ${{ github.ref == 'refs/heads/main' && 'sonatype' || null }}
     permissions:
       contents: read
       packages: write
@@ -22,6 +24,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          server-id: central
+          server-username: SONATYPE_USERNAME
+          server-password: SONATYPE_TOKEN
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
       - uses: actions/cache@v3
         with:
           path: ~/.m2
@@ -38,9 +46,9 @@ jobs:
         with:
           report_paths: '**/target/surefire-reports/TEST-*.xml'
       - name: Publish Maven packages
-        if: github.ref == 'refs/heads/main'
+        if: startsWith(github.event.ref, 'refs/tags/v')
         run: ./mvnw --batch-mode deploy
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: eu-north-1
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_TOKEN: ${{ secrets.SONATYPE_TOKEN }}

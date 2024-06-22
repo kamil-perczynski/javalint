@@ -4,12 +4,39 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>io.github.kamilperczynski.javalint</groupId>
+    <groupId>io.github.kamil-perczynski</groupId>
     <artifactId>javalint-parent</artifactId>
     <version>1.3-SNAPSHOT</version>
   </parent>
 
   <artifactId>javalint-formatter</artifactId>
+  <description>
+    Java, XML, JSON and YAML formatter based on Intellij CE formatter.
+  </description>
+  <url>https://github.com/kamil-perczynski/javalint/</url>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Kamil Perczyński</name>
+      <email>kamil.perczynski.95@gmail.com</email>
+      <organization>Kamil Perczyński</organization>
+      <organizationUrl>https://github.com/kamil-perczynski/</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/kamil-perczynski/javalint.git</connection>
+    <developerConnection>scm:git:ssh://github.com:kamil-perczynski/javalint.git
+    </developerConnection>
+    <url>https://github.com/kamil-perczynski/javalint/</url>
+  </scm>
 
   <repositories>
     <repository>
@@ -345,6 +372,39 @@
         <artifactId>kotlin-maven-plugin</artifactId>
       </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <configuration>
+              <transformers>
+                <transformer
+                  implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+                <transformer
+                  implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer"/>
+                <transformer
+                  implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+      </plugin>
     </plugins>
   </build>
 
