@@ -6,7 +6,7 @@
 
   <groupId>io.github.kamil-perczynski</groupId>
   <artifactId>javalint-parent</artifactId>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.3</version>
   <packaging>pom</packaging>
 
   <description>Java, XML, JSON and YAML formatter based on Intellij CE formatter.</description>
@@ -235,7 +235,6 @@
         <artifactId>central-publishing-maven-plugin</artifactId>
         <configuration>
           <publishingServerId>central</publishingServerId>
-          <skipPublishing>true</skipPublishing>
           <excludeArtifacts>javalint-cli</excludeArtifacts>
         </configuration>
       </plugin>
