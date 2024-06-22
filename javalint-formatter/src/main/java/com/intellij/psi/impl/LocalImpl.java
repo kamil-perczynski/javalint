@@ -15,7 +15,9 @@ import org.jetbrains.annotations.NotNull;
  * Modifications made by Kamil Perczyński on 2024-01-14
  * <p>
  * Modifications:
- * <li>Removed check for synchronization between Document and PsiFile
+ * <ul>
+ * <li>Removed check for synchronization between Document and PsiFile</li>
+ * </ul>
  */
 public class LocalImpl extends PsiDocumentManagerBase {
 

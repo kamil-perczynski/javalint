@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/javalint-cli/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javalint-cli/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-cli/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-codegen/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-codegen/src/main/resources" charset="UTF-8" />
@@ -10,6 +11,7 @@
     <file url="file://$PROJECT_DIR$/javalint-ec4j-linter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-ec4j-linter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-formatter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javalint-formatter/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/javalint-formatter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />

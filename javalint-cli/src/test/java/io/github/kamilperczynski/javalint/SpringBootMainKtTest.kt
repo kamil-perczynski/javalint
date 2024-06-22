@@ -36,7 +36,7 @@ class SpringBootMainKtTest {
   fun tearDown() {
     System.setOut(systemOut)
     log.info("Deleting {}", baseDir)
-//    deleteExtractedDir(baseDir)
+    deleteExtractedDir(baseDir)
 
     println(consoleOutput())
   }
